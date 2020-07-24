@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <PackageIcon>logo.png</PackageIcon>
+    <Authors>Alex Griffith</Authors>
+    <Description>Sample rules for GravyBot IRC bot library</Description>
+    <PackageProjectUrl>https://gravybot.halomademeapc.com</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/halomademeapc/GravyBot</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageTags>irc,bot</PackageTags>
+    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,6 +18,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GravyBot\GravyBot.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
