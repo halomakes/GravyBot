@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <Authors>Alex Griffith</Authors>
+    <Description>IRC bot framework for GravyIrc</Description>
+    <PackageProjectUrl>https://gravybot.halomademeapc.com</PackageProjectUrl>
+    <PackageIcon>logo.png</PackageIcon>
+    <RepositoryUrl>https://github.com/halomademeapc/GravyBot</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageTags>irc,bot</PackageTags>
+    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +21,13 @@
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.5" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.6" />
     <PackageReference Include="System.Linq.Async" Version="4.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
