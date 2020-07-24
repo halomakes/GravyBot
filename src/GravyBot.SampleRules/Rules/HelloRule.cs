@@ -21,7 +21,7 @@ namespace GravyBot.DefaultRules.Rules
                 {
                     Content = $"Hello, {incomingMessage.From}!",
                     OutputType = IrcMessageType.Message,
-                    Target = incomingMessage.To
+                    Target = incomingMessage.IsChannelMessage ? incomingMessage.To : incomingMessage.From
                 };
             }
         }

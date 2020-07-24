@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 
 namespace GravyBot.DefaultRules.Rules
 {
-    public class ExceptionLoggingRule : MessageRuleBase<ExceptionMessage>, IMessageRule<ExceptionMessage>
+    public class ExceptionLoggingRule : MessageRuleBase<Exception>, IMessageRule<Exception>
     {
         private readonly ChatBeetConfiguration config;
 
@@ -12,23 +13,23 @@ namespace GravyBot.DefaultRules.Rules
             config = options.Value;
         }
 
-        public override async IAsyncEnumerable<OutboundIrcMessage> Respond(ExceptionMessage incomingMessage)
+        public override async IAsyncEnumerable<OutboundIrcMessage> Respond(Exception exception)
         {
             yield return new OutboundIrcMessage
             {
-                Content = $"Encountered exception from {incomingMessage.Sender}",
+                Content = $"{IrcValues.RED}Encountered exception from {IrcValues.ORANGE}{IrcValues.BOLD}{exception.Source}",
                 OutputType = IrcMessageType.Announcement,
                 Target = config.LogChannel
             };
 
             yield return new OutboundIrcMessage
             {
-                Content = $"Base exception: {incomingMessage.Exception.Message}",
+                Content = $"Base exception: {exception.Message}",
                 Target = config.LogChannel
             };
 
             var depth = 0;
-            var currentException = incomingMessage.Exception;
+            var currentException = exception;
 
             while (depth < 4 && currentException.InnerException != null)
             {

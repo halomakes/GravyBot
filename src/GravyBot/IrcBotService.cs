@@ -123,14 +123,6 @@ namespace GravyBot
             }
         }
 
-        private static IInboundMessage ConvertInboundIrcMessage(PrivateMessage message) => new IrcMessage
-        {
-            DateRecieved = DateTime.Now,
-            Channel = message.To,
-            Sender = message.From,
-            Content = message.Message
-        };
-
         public async Task JoinChannel(string channelName)
         {
             if (!client.Channels.Any(c => c.Name == channelName))
@@ -142,8 +134,6 @@ namespace GravyBot
         public async Task Connect()
         {
             await client.ConnectAsync(config.Server, config.Port);
-            await client.SendAsync(new NickMessage(config.Nick));
-            await client.SendAsync(new UserMessage(config.Nick, config.Identity));
         }
 
         private void Client_OnRawDataReceived(IrcClient client, string rawData)

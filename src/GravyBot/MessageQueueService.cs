@@ -46,7 +46,7 @@ namespace GravyBot
                 }
                 catch (Exception e)
                 {
-                    Push(new ExceptionMessage(e));
+                    Push(e);
                 }
 
             }

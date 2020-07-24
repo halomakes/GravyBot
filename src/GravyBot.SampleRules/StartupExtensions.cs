@@ -1,5 +1,6 @@
 ﻿using GravyBot.DefaultRules.Rules;
 using GravyIrc.Messages;
+using System;
 
 namespace GravyBot.DefaultRules
 {
@@ -8,7 +9,7 @@ namespace GravyBot.DefaultRules
         public static BotRulePipeline AddDefaultRules(this BotRulePipeline pipeline)
         {
             pipeline.RegisterRule<HelloRule, PrivateMessage>();
-            pipeline.RegisterRule<ExceptionLoggingRule, ExceptionMessage>();
+            pipeline.RegisterRule<ExceptionLoggingRule, Exception>();
 
             return pipeline;
         }
