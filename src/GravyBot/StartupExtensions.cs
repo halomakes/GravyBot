@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 
-namespace GravyBot.Irc
+namespace GravyBot
 {
     public static class StartupExtensions
     {

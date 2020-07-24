@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GravyBot.Irc
+namespace GravyBot
 {
     public class MessageQueueService
     {
@@ -40,7 +40,9 @@ namespace GravyBot.Irc
                 try
                 {
                     await foreach (var responseMessage in rule.Respond(message))
+                    {
                         AddOutput(responseMessage);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -85,14 +87,18 @@ namespace GravyBot.Irc
         {
             var overflow = messageHistory.Count - MAX_HISTORY;
             if (overflow > 0)
+            {
                 messageHistory = messageHistory.Skip(overflow).Take(MAX_HISTORY).ToList();
+            }
         }
 
         private void TrimOutputHistory()
         {
             var overflow = outputHistory.Count - MAX_HISTORY;
             if (overflow > 0)
+            {
                 outputHistory = outputHistory.Skip(overflow).Take(MAX_HISTORY).ToList();
+            }
         }
     }
 }

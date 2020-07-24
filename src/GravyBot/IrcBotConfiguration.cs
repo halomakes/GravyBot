@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GravyBot.Irc
+namespace GravyBot
 {
     public class IrcBotConfiguration
     {

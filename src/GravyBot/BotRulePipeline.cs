@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 
 namespace GravyBot
+{
     public class BotRulePipeline
     {
         private readonly IServiceCollection services;

@@ -1,5 +1,4 @@
 ﻿using GravyBot.DefaultRules.Rules;
-using GravyBot.Irc;
 using GravyIrc.Messages;
 
 namespace GravyBot.DefaultRules
