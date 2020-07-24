@@ -13,16 +13,11 @@ namespace GravyBot.DefaultRules.Rules
             config = options.Value;
         }
 
-        public override async IAsyncEnumerable<OutboundIrcMessage> Respond(PrivateMessage incomingMessage)
+        public override async IAsyncEnumerable<IClientMessage> Respond(PrivateMessage incomingMessage)
         {
             if (incomingMessage.Message == $"{config.CommandPrefix}hello")
             {
-                yield return new OutboundIrcMessage
-                {
-                    Content = $"Hello, {incomingMessage.From}!",
-                    OutputType = IrcMessageType.Message,
-                    Target = incomingMessage.IsChannelMessage ? incomingMessage.To : incomingMessage.From
-                };
+                yield return new PrivateMessage(incomingMessage.IsChannelMessage ? incomingMessage.To : incomingMessage.From, $"Hello, {incomingMessage.From}!");
             }
         }
     }

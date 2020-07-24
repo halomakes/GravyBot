@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using GravyIrc.Messages;
+using System.Collections.Generic;
 
 namespace GravyBot
 {
     public interface IMessageRule
     {
-        IAsyncEnumerable<OutboundIrcMessage> Respond(object incomingMessage);
+        IAsyncEnumerable<IClientMessage> Respond(object incomingMessage);
     }
 
     public interface IMessageRule<TMessage> : IMessageRule
     {
-        IAsyncEnumerable<OutboundIrcMessage> Respond(TMessage incomingMessage);
+        IAsyncEnumerable<IClientMessage> Respond(TMessage incomingMessage);
     }
 }

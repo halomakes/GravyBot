@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using GravyIrc.Messages;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,9 @@ namespace GravyBot
     {
         private const int MAX_HISTORY = 300;
 
-        private List<OutboundIrcMessage> queuedMessages = new List<OutboundIrcMessage>();
+        private List<IClientMessage> queuedMessages = new List<IClientMessage>();
         private List<object> messageHistory = new List<object>();
-        private List<OutboundIrcMessage> outputHistory = new List<OutboundIrcMessage>();
+        private List<IClientMessage> outputHistory = new List<IClientMessage>();
         private readonly IServiceProvider serviceProvider;
 
         public event EventHandler MessageAdded;
@@ -22,9 +23,9 @@ namespace GravyBot
             this.serviceProvider = serviceProvider;
         }
 
-        public IEnumerable<OutboundIrcMessage> ViewAll() => queuedMessages;
+        public IEnumerable<IClientMessage> ViewAll() => queuedMessages;
         public IEnumerable<object> GetHistory() => messageHistory;
-        public IEnumerable<OutboundIrcMessage> GetOutputHistory() => outputHistory;
+        public IEnumerable<IClientMessage> GetOutputHistory() => outputHistory;
 
         private Task ApplyRules<TMessage>(TMessage message)
         {
@@ -52,16 +53,16 @@ namespace GravyBot
             }
         }
 
-        public List<OutboundIrcMessage> PopAll()
+        public List<IClientMessage> PopAll()
         {
             var messages = queuedMessages;
-            queuedMessages = new List<OutboundIrcMessage>();
+            queuedMessages = new List<IClientMessage>();
             return messages;
         }
 
-        public void Remove(OutboundIrcMessage message) => queuedMessages.Remove(message);
+        public void Remove(IClientMessage message) => queuedMessages.Remove(message);
 
-        private void AddOutput(OutboundIrcMessage message)
+        private void AddOutput(IClientMessage message)
         {
             queuedMessages.Add(message);
             outputHistory.Add(message);
@@ -76,7 +77,7 @@ namespace GravyBot
             _ = Task.Run(() => ApplyRules(message));
         }
 
-        public void PushRaw(OutboundIrcMessage message) => AddOutput(message);
+        public void PushRaw(IClientMessage message) => AddOutput(message);
 
         private void OnMessageAdded(EventArgs e)
         {

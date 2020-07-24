@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using GravyIrc.Messages;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 
@@ -13,20 +14,11 @@ namespace GravyBot.DefaultRules.Rules
             config = options.Value;
         }
 
-        public override async IAsyncEnumerable<OutboundIrcMessage> Respond(Exception exception)
+        public override async IAsyncEnumerable<IClientMessage> Respond(Exception exception)
         {
-            yield return new OutboundIrcMessage
-            {
-                Content = $"{IrcValues.RED}Encountered exception from {IrcValues.ORANGE}{IrcValues.BOLD}{exception.Source}",
-                OutputType = IrcMessageType.Announcement,
-                Target = config.LogChannel
-            };
+            yield return new NoticeMessage(config.LogChannel, $"{IrcValues.RED}Encountered exception from {IrcValues.ORANGE}{IrcValues.BOLD}{exception.Source}");
 
-            yield return new OutboundIrcMessage
-            {
-                Content = $"Base exception: {exception.Message}",
-                Target = config.LogChannel
-            };
+            yield return new PrivateMessage(config.LogChannel, $"Base exception: {exception.Message}");
 
             var depth = 0;
             var currentException = exception;
@@ -36,11 +28,7 @@ namespace GravyBot.DefaultRules.Rules
                 currentException = currentException.InnerException;
                 depth++;
 
-                yield return new OutboundIrcMessage
-                {
-                    Content = $"Inner exception: {currentException.Message}",
-                    Target = config.LogChannel
-                };
+                yield return new PrivateMessage(config.LogChannel, $"Inner exception: {currentException.Message}");
             }
         }
     }

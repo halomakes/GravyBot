@@ -90,15 +90,20 @@ namespace GravyBot
             await JoinDefaultChannels();
 
             var queue = queueService.ViewAll().ToList();
-            foreach (var q in queue)
+            Console.WriteLine($"Sending {queue.Count()} messages.");
+
+            foreach (var message in queue)
             {
-                if (q.Target.StartsWith("#"))
+                if (message is IChannelMessage m)
                 {
-                    await JoinChannel(q.Target);
+                    if (m.IsChannelMessage)
+                    {
+                        await JoinChannel(m.Target);
+                    }
                 }
 
-                await client.SendAsync(GenerateMessage(q));
-                queueService.Remove(q);
+                await client.SendAsync(message);
+                queueService.Remove(message);
             }
         }
 
@@ -107,19 +112,6 @@ namespace GravyBot
             foreach (var c in config.Channels)
             {
                 await JoinChannel(c);
-            }
-        }
-
-        private static IClientMessage GenerateMessage(OutboundIrcMessage message)
-        {
-            switch (message.OutputType)
-            {
-                case IrcMessageType.Announcement:
-                    return new NoticeMessage(message.Target, message.Content);
-                case IrcMessageType.Activity:
-                    return new PrivateMessage(message.Target, $"/me {message.Content}");
-                default:
-                    return new PrivateMessage(message.Target, message.Content);
             }
         }
 
