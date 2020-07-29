@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace GravyBot
 {
+    /// <summary>
+    /// Service used for queueing messages
+    /// </summary>
     public class MessageQueueService
     {
         private const int MAX_HISTORY = 300;
@@ -16,6 +19,9 @@ namespace GravyBot
         private List<IClientMessage> outputHistory = new List<IClientMessage>();
         private readonly IServiceProvider serviceProvider;
 
+        /// <summary>
+        /// Event fired whenever a message is added
+        /// </summary>
         public event EventHandler MessageAdded;
 
         public MessageQueueService(IServiceProvider serviceProvider)
@@ -23,8 +29,19 @@ namespace GravyBot
             this.serviceProvider = serviceProvider;
         }
 
+        /// <summary>
+        /// Get a list of messages queued up to be sent
+        /// </summary>
         public IEnumerable<IClientMessage> ViewAll() => queuedMessages;
+
+        /// <summary>
+        /// Get a list of recent incoming messages
+        /// </summary>
         public IEnumerable<object> GetHistory() => messageHistory;
+
+        /// <summary>
+        /// Get a list of recently sent messages
+        /// </summary>
         public IEnumerable<IClientMessage> GetOutputHistory() => outputHistory;
 
         private Task ApplyRules<TMessage>(TMessage message)
@@ -53,6 +70,9 @@ namespace GravyBot
             }
         }
 
+        /// <summary>
+        /// Get all pending outbound messages and clear queue
+        /// </summary>
         public List<IClientMessage> PopAll()
         {
             var messages = queuedMessages;
@@ -60,6 +80,10 @@ namespace GravyBot
             return messages;
         }
 
+        /// <summary>
+        /// Remove an outbound message from the queue
+        /// </summary>
+        /// <param name="message">Message to remove</param>
         public void Remove(IClientMessage message) => queuedMessages.Remove(message);
 
         private void AddOutput(IClientMessage message)
@@ -70,6 +94,11 @@ namespace GravyBot
             OnMessageAdded(EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Record an inbound message
+        /// </summary>
+        /// <typeparam name="TMessage">Type of message</typeparam>
+        /// <param name="message">Message to record</param>
         public void Push<TMessage>(TMessage message)
         {
             messageHistory.Add(message);
@@ -77,6 +106,10 @@ namespace GravyBot
             _ = Task.Run(() => ApplyRules(message));
         }
 
+        /// <summary>
+        /// Queue a message to be sent
+        /// </summary>
+        /// <param name="message">Message to send</param>
         public void PushRaw(IClientMessage message) => AddOutput(message);
 
         private void OnMessageAdded(EventArgs e)
