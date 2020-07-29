@@ -18,7 +18,7 @@ namespace GravyBot
     /// </summary>
     public class IrcBotService : IHostedService, IDisposable
     {
-        private readonly IrcClient client;
+        private IrcClient client;
         private readonly MessageQueueService queueService;
         private readonly IrcBotConfiguration config;
         private Timer timer;
@@ -32,11 +32,18 @@ namespace GravyBot
             this.pipeline = pipeline;
             config = options.Value;
 
+            queueService.MessageAdded += QueueService_MessageAdded;
+
+            InitializeClient();
+        }
+
+        private void InitializeClient()
+        {
             var user = new User(config.Nick, config.Identity);
+
             client = new IrcClient(user, new TcpClientConnection());
             client.OnRawDataReceived += Client_OnRawDataReceived;
             client.EventHub.Subscribe<RplWelcomeMessage>(Client_OnRegistered);
-            queueService.MessageAdded += QueueService_MessageAdded;
             client.OnDisconnect += Client_OnDisconnect;
 
             SubscribeToMessageEvents();
@@ -69,7 +76,7 @@ namespace GravyBot
             client.EventHub.Subscribe<TMessage>((client, args) => queueService.Push(args.IrcMessage));
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken = default)
         {
             await ConnectAsync();
             timer = new Timer(ProcessQueue, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
@@ -154,14 +161,17 @@ namespace GravyBot
         {
             if (pipeline.IsAutoReconnectEnabled)
             {
+                Dispose();
                 await Task.Delay(1000);
                 Console.WriteLine($"{DateTime.Now} Attempting to reconnect to server...");
+                InitializeClient();
                 try
                 {
-                    await ConnectAsync();
+                    await StartAsync();
                 }
-                catch (SocketException)
+                catch (SocketException e)
                 {
+                    Console.WriteLine($"{DateTime.Now} Couldn't reconnect: {e}");
                     await ReconnectAsync();
                 }
             }
