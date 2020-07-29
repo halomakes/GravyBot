@@ -7,9 +7,9 @@ namespace GravyBot.DefaultRules.Rules
 {
     public class ExceptionLoggingRule : MessageRuleBase<Exception>, IMessageRule<Exception>
     {
-        private readonly ChatBeetConfiguration config;
+        private readonly IrcBotConfiguration config;
 
-        public ExceptionLoggingRule(IOptions<ChatBeetConfiguration> options)
+        public ExceptionLoggingRule(IOptions<IrcBotConfiguration> options)
         {
             config = options.Value;
         }

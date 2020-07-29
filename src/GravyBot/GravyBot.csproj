@@ -9,11 +9,13 @@
     <RepositoryUrl>https://github.com/halomademeapc/GravyBot</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>irc,bot</PackageTags>
-    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
+    <PackageReleaseNotes>Add auto-reconnect</PackageReleaseNotes>
+    <Version>1.0.4</Version>
+    <UserSecretsId>a20bff03-8657-40ec-8c3f-a43a17e35cfa</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GravyIrc" Version="1.0.1" />
+    <PackageReference Include="GravyIrc" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.5" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.5" />

@@ -7,6 +7,12 @@ namespace GravyBot
 {
     public static class StartupExtensions
     {
+        /// <summary>
+        /// Add an IRC bot to the dependency injection container
+        /// </summary>
+        /// <param name="services">Service collection</param>
+        /// <param name="configSection">Configuration section to bind to</param>
+        /// <param name="configurePipeline">Configuration action for rule pipeline</param>
         public static IServiceCollection AddIrcBot(this IServiceCollection services, IConfigurationSection configSection, Action<BotRulePipeline> configurePipeline = null)
         {
             services.Configure<IrcBotConfiguration>(c => configSection.Bind(c));
@@ -14,6 +20,12 @@ namespace GravyBot
             return services;
         }
 
+        /// <summary>
+        /// Add an IRC bot to the dependency injection container
+        /// </summary>
+        /// <param name="services">Service collection</param>
+        /// <param name="configure">Action to configure bot settings</param>
+        /// <param name="configurePipeline">Configuration action for rule pipeline</param>
         public static IServiceCollection AddIrcBot(this IServiceCollection services, Action<IrcBotConfiguration> configure, Action<BotRulePipeline> configurePipeline = null)
         {
             if (configure == null)

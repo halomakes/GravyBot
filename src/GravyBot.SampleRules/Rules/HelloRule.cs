@@ -6,9 +6,9 @@ namespace GravyBot.DefaultRules.Rules
 {
     public class HelloRule : MessageRuleBase<PrivateMessage>, IMessageRule<PrivateMessage>
     {
-        private readonly ChatBeetConfiguration config;
+        private readonly IrcBotConfiguration config;
 
-        public HelloRule(IOptions<ChatBeetConfiguration> options)
+        public HelloRule(IOptions<IrcBotConfiguration> options)
         {
             config = options.Value;
         }

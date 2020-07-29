@@ -1,5 +1,8 @@
 ﻿namespace GravyBot
 {
+    /// <summary>
+    /// Values used for formatting IRC messages
+    /// </summary>
     public static class IrcValues
     {
         public static string BOLD = "\x02";
@@ -22,6 +25,6 @@
         public static string PINK = "\x000313";
         public static string GREY = "\x000314";
         public static string SILVER = "\x000315";
-        public static int MAX_BYTES = 460;
+        public static int MAX_BYTES = 512 - 1;
     }
 }

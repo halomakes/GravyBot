@@ -31,4 +31,4 @@ jobs:
         - dotnet build
         - dotnet publish -c release
         - dotnet pack -c release --include-symbols -o publish
-        - dotnet nuget push publish/*.nupkg --skip-duplicate -k $NUGET_TOKEN -s https://api.nuget.org/v3/index.json
+        - for f in publish/*.nupkg ; do dotnet nuget push $f --skip-duplicate -k $NUGET_TOKEN -s https://api.nuget.org/v3/index.json ; done
