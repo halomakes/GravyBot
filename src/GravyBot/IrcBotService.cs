@@ -57,6 +57,7 @@ namespace GravyBot
 
         private void SubscribeToMessageEvents()
         {
+            registeredSubscriptionTypes.Clear();
             var method = typeof(IrcBotService).GetMethod(nameof(IrcBotService.SubscribeToEvent), BindingFlags.NonPublic | BindingFlags.Instance);
             var eligibleTypes = pipeline.SubscribedTypes.Where(t => typeof(IServerMessage).IsAssignableFrom(t)).Distinct();
 
