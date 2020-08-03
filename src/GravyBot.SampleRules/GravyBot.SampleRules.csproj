@@ -9,8 +9,8 @@
     <RepositoryUrl>https://github.com/halomademeapc/GravyBot</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>irc,bot</PackageTags>
-    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
-    <Version>1.0.1</Version>
+    <PackageReleaseNotes>Make rules synchronous</PackageReleaseNotes>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

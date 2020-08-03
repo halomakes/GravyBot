@@ -14,7 +14,7 @@ namespace GravyBot.DefaultRules.Rules
             config = options.Value;
         }
 
-        public override async IAsyncEnumerable<IClientMessage> Respond(Exception exception)
+        public override IEnumerable<IClientMessage> Respond(Exception exception)
         {
             yield return new NoticeMessage(config.LogChannel, $"{IrcValues.RED}Encountered exception from {IrcValues.ORANGE}{IrcValues.BOLD}{exception.Source}");
 

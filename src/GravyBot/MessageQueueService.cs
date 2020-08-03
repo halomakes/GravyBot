@@ -46,18 +46,19 @@ namespace GravyBot
 
         private Task ApplyRules<TMessage>(TMessage message)
         {
-            var rules = serviceProvider.GetServices<IMessageRule>();
-            var matchingRuleType = typeof(IMessageRule<>).MakeGenericType(message.GetType());
-            var applicableRules = rules.Where(r => matchingRuleType.IsAssignableFrom(r.GetType()));
-            var ruleTasks = applicableRules.Select(ExecuteRuleAsync);
+            var rules = GetRules<IMessageRule, TMessage>(typeof(IMessageRule<>));
+            rules.ToList().ForEach(ExecuteRule);
+
+            var asyncRules = GetRules<IAsyncMessageRule, TMessage>(typeof(IAsyncMessageRule<>)).Where(r => r.Matches(message));
+            var ruleTasks = asyncRules.Select(ExecuteRuleAsync);
 
             return Task.WhenAll(ruleTasks);
 
-            async Task ExecuteRuleAsync(IMessageRule rule)
+            async Task ExecuteRuleAsync(IAsyncMessageRule rule)
             {
                 try
                 {
-                    await foreach (var responseMessage in rule.Respond(message))
+                    await foreach (var responseMessage in rule.RespondAsync(message))
                     {
                         AddOutput(responseMessage);
                     }
@@ -66,8 +67,31 @@ namespace GravyBot
                 {
                     Push(e);
                 }
-
             }
+
+            void ExecuteRule(IMessageRule rule)
+            {
+                try
+                {
+                    foreach (var responseMessage in rule.Respond(message))
+                    {
+                        AddOutput(responseMessage);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Push(e);
+                }
+            }
+        }
+
+        private IEnumerable<TRule> GetRules<TRule, TMessage>(Type genericType)
+        {
+            var rules = serviceProvider.GetServices<TRule>();
+            var matchingRuleType = genericType.MakeGenericType(typeof(TMessage));
+            var applicableRules = rules.Where(r => matchingRuleType.IsAssignableFrom(r.GetType()));
+
+            return applicableRules;
         }
 
         /// <summary>
