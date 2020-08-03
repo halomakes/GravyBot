@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace GravyBot.DefaultRules.Rules
 {
-    public class HelloRule : AsyncMessageRuleBase<PrivateMessage>, IAsyncMessageRule<PrivateMessage>
+    public class HelloRule : MessageRuleBase<PrivateMessage>, IMessageRule<PrivateMessage>
     {
         private readonly IrcBotConfiguration config;
 
@@ -13,7 +13,7 @@ namespace GravyBot.DefaultRules.Rules
             config = options.Value;
         }
 
-        public override async IAsyncEnumerable<IClientMessage> RespondAsync(PrivateMessage incomingMessage)
+        public override IEnumerable<IClientMessage> Respond(PrivateMessage incomingMessage)
         {
             if (incomingMessage.Message == $"{config.CommandPrefix}hello")
             {
