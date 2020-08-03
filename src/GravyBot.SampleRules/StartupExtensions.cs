@@ -8,8 +8,8 @@ namespace GravyBot.DefaultRules
     {
         public static BotRulePipeline AddSampleRules(this BotRulePipeline pipeline)
         {
-            pipeline.RegisterRule<HelloRule, PrivateMessage>();
-            pipeline.RegisterRule<ExceptionLoggingRule, Exception>();
+            pipeline.RegisterAsyncRule<HelloRule, PrivateMessage>();
+            pipeline.RegisterAsyncRule<ExceptionLoggingRule, Exception>();
 
             return pipeline;
         }
