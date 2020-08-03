@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace GravyBot.DefaultRules.Rules
 {
-    public class ExceptionLoggingRule : MessageRuleBase<Exception>, IMessageRule<Exception>
+    public class ExceptionLoggingRule : AsyncMessageRuleBase<Exception>, IAsyncMessageRule<Exception>
     {
         private readonly IrcBotConfiguration config;
 
@@ -14,7 +14,7 @@ namespace GravyBot.DefaultRules.Rules
             config = options.Value;
         }
 
-        public override async IAsyncEnumerable<IClientMessage> Respond(Exception exception)
+        public override async IAsyncEnumerable<IClientMessage> RespondAsync(Exception exception)
         {
             yield return new NoticeMessage(config.LogChannel, $"{IrcValues.RED}Encountered exception from {IrcValues.ORANGE}{IrcValues.BOLD}{exception.Source}");
 
