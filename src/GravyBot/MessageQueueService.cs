@@ -46,10 +46,10 @@ namespace GravyBot
 
         private Task ApplyRules<TMessage>(TMessage message)
         {
-            var rules = GetRules<IMessageRule, TMessage>();
+            var rules = GetRules<IMessageRule, TMessage>(typeof(IMessageRule<>));
             rules.ToList().ForEach(ExecuteRule);
 
-            var asyncRules = GetRules<IAsyncMessageRule, TMessage>();
+            var asyncRules = GetRules<IAsyncMessageRule, TMessage>(typeof(IAsyncMessageRule<>)).Where(r => r.Matches(message));
             var ruleTasks = asyncRules.Select(ExecuteRuleAsync);
 
             return Task.WhenAll(ruleTasks);
@@ -85,10 +85,10 @@ namespace GravyBot
             }
         }
 
-        private IEnumerable<TRule> GetRules<TRule, TMessage>()
+        private IEnumerable<TRule> GetRules<TRule, TMessage>(Type genericType)
         {
             var rules = serviceProvider.GetServices<TRule>();
-            var matchingRuleType = typeof(TRule).MakeGenericType(typeof(TMessage));
+            var matchingRuleType = genericType.MakeGenericType(typeof(TMessage));
             var applicableRules = rules.Where(r => matchingRuleType.IsAssignableFrom(r.GetType()));
 
             return applicableRules;

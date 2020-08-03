@@ -18,7 +18,7 @@ namespace GravyBot
         /// Indicates if a task should be created to fully process the rule
         /// </summary>
         /// <param name="incomingMessage">Inbound message</param>
-        bool MatchesFilter(object incomingMessage);
+        bool Matches(object incomingMessage);
     }
 
     /// <summary>
@@ -37,6 +37,6 @@ namespace GravyBot
         /// Indicates if a task should be created to fully process the rule
         /// </summary>
         /// <param name="incomingMessage">Inbound message</param>
-        bool MatchesFilter(object incomingMessage);
+        bool Matches(TMessage incomingMessage);
     }
 }

@@ -10,11 +10,11 @@ namespace GravyBot
     /// <typeparam name="TMessage">Type of message to handle events for</typeparam>
     public abstract class AsyncMessageRuleBase<TMessage> : IAsyncMessageRule<TMessage>, IAsyncMessageRule
     {
-        public abstract bool MatchesFilter(TMessage incomingMessage);
+        public abstract bool Matches(TMessage incomingMessage);
 
-        public bool MatchesFilter(object incomingMessage) =>
+        public bool Matches(object incomingMessage) =>
             incomingMessage is TMessage message
-            ? MatchesFilter(message)
+            ? Matches(message)
             : false;
 
         /// <summary>
