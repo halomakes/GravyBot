@@ -12,6 +12,7 @@
     <PackageReleaseNotes>Add auto-reconnect</PackageReleaseNotes>
     <Version>1.1.0</Version>
     <UserSecretsId>a20bff03-8657-40ec-8c3f-a43a17e35cfa</UserSecretsId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
