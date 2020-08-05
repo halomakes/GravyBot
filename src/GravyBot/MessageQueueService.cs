@@ -15,7 +15,7 @@ namespace GravyBot
         private const int MAX_HISTORY = 300;
 
         private List<IClientMessage> queuedMessages = new List<IClientMessage>();
-        private List<object> messageHistory = new List<object>();
+        private List<(DateTime DateReceived, object Message)> messageHistory = new List<(DateTime, object)>();
         private List<IClientMessage> outputHistory = new List<IClientMessage>();
         private readonly IServiceProvider serviceProvider;
 
@@ -37,7 +37,7 @@ namespace GravyBot
         /// <summary>
         /// Get a list of recent incoming messages
         /// </summary>
-        public IEnumerable<object> GetHistory() => messageHistory;
+        public IEnumerable<(DateTime DateReceived, object Message)> GetHistory() => messageHistory;
 
         /// <summary>
         /// Get a list of recently sent messages
@@ -125,7 +125,7 @@ namespace GravyBot
         /// <param name="message">Message to record</param>
         public void Push<TMessage>(TMessage message)
         {
-            messageHistory.Add(message);
+            messageHistory.Add((DateTime.Now, message));
             TrimHistory();
             _ = Task.Run(() => ApplyRules(message));
         }
