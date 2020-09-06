@@ -16,9 +16,9 @@ namespace GravyBot.DefaultRules.Rules
 
         public override IEnumerable<IClientMessage> Respond(Exception exception)
         {
-            yield return new NoticeMessage(config.LogChannel, $"{IrcValues.RED}Encountered exception from {IrcValues.ORANGE}{IrcValues.BOLD}{exception.Source}");
+            yield return new NoticeMessage(config.LogChannel, $"{IrcValues.RED}Encountered {IrcValues.ITALIC}{exception.GetType().Name}{IrcValues.RESET} from {IrcValues.ORANGE}{IrcValues.BOLD}{exception.Source}");
 
-            yield return new PrivateMessage(config.LogChannel, $"Base exception: {exception.Message}");
+            yield return new PrivateMessage(config.LogChannel, $"Base {exception.GetType().Name}: {exception.Message}");
 
             var depth = 0;
             var currentException = exception;
@@ -28,7 +28,7 @@ namespace GravyBot.DefaultRules.Rules
                 currentException = currentException.InnerException;
                 depth++;
 
-                yield return new PrivateMessage(config.LogChannel, $"Inner exception: {currentException.Message}");
+                yield return new PrivateMessage(config.LogChannel, $"Inner {currentException.GetType().Name}: {currentException.Message}");
             }
         }
     }
