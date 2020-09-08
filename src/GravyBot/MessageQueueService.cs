@@ -46,10 +46,10 @@ namespace GravyBot
 
         private Task ApplyRules<TMessage>(TMessage message)
         {
-            var rules = GetRules<IMessageRule, TMessage>(typeof(IMessageRule<>));
+            var rules = GetRules<IMessageRule, TMessage>(typeof(IMessageRule<>)).DistinctBy(t => t.GetType());
             rules.ToList().ForEach(ExecuteRule);
 
-            var asyncRules = GetRules<IAsyncMessageRule, TMessage>(typeof(IAsyncMessageRule<>)).Where(r => r.Matches(message));
+            var asyncRules = GetRules<IAsyncMessageRule, TMessage>(typeof(IAsyncMessageRule<>)).Where(r => r.Matches(message)).DistinctBy(t => t.GetType());
             var ruleTasks = asyncRules.Select(ExecuteRuleAsync);
 
             return Task.WhenAll(ruleTasks);

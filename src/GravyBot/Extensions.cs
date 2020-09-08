@@ -2,10 +2,13 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace GravyBot
 {
-    public static class StartupExtensions
+    public static class Extensions
     {
         /// <summary>
         /// Add an IRC bot to the dependency injection container
@@ -51,5 +54,7 @@ namespace GravyBot
                 pipeline
             ));
         }
+
+        internal static IEnumerable<T> DistinctBy<T, TKey>(this IEnumerable<T> items, Func<T, TKey> property) => items.GroupBy(property).Select(x => x.First());
     }
 }
