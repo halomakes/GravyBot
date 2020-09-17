@@ -9,8 +9,8 @@
     <RepositoryUrl>https://github.com/halomademeapc/GravyBot</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>irc,bot</PackageTags>
-    <PackageReleaseNotes>Add scoped service support</PackageReleaseNotes>
-    <Version>1.3.0</Version>
+    <PackageReleaseNotes>Add scoped service support, fix early disposal issue</PackageReleaseNotes>
+    <Version>1.3.1</Version>
     <UserSecretsId>a20bff03-8657-40ec-8c3f-a43a17e35cfa</UserSecretsId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>

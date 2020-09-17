@@ -44,7 +44,7 @@ namespace GravyBot
         /// </summary>
         public IEnumerable<IClientMessage> GetOutputHistory() => outputHistory;
 
-        private Task ApplyRules<TMessage>(TMessage message)
+        private async Task ApplyRules<TMessage>(TMessage message)
         {
             using (var scope = serviceProvider.CreateScope())
             {
@@ -54,7 +54,7 @@ namespace GravyBot
                 var asyncRules = GetRules<IAsyncMessageRule, TMessage>(scope, typeof(IAsyncMessageRule<>)).Where(r => r.Matches(message)).DistinctBy(t => t.GetType());
                 var ruleTasks = asyncRules.Select(ExecuteRuleAsync);
 
-                return Task.WhenAll(ruleTasks);
+                await Task.WhenAll(ruleTasks);
             }
 
             async Task ExecuteRuleAsync(IAsyncMessageRule rule)
