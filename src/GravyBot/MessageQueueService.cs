@@ -48,10 +48,10 @@ namespace GravyBot
         {
             using (var scope = serviceProvider.CreateScope())
             {
-                var rules = serviceProvider.GetServices<IMessageRule<TMessage>>().DistinctBy(t => t.GetType());
+                var rules = scope.ServiceProvider.GetServices<IMessageRule<TMessage>>().DistinctBy(t => t.GetType());
                 rules.ToList().ForEach(ExecuteRule);
 
-                var asyncRules = serviceProvider.GetServices<IAsyncMessageRule<TMessage>>().DistinctBy(t => t.GetType()).Where(r => r.Matches(message));
+                var asyncRules = scope.ServiceProvider.GetServices<IAsyncMessageRule<TMessage>>().DistinctBy(t => t.GetType()).Where(r => r.Matches(message));
                 var ruleTasks = asyncRules.Select(ExecuteRuleAsync);
 
                 await Task.WhenAll(ruleTasks);
