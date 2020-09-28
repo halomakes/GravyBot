@@ -1,4 +1,5 @@
 ﻿using GravyIrc.Messages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,14 +9,12 @@ namespace GravyBot
     /// Base provided for rules to inherit from
     /// </summary>
     /// <typeparam name="TMessage">Type of message to handle events for</typeparam>
-    public abstract class AsyncMessageRuleBase<TMessage> : IAsyncMessageRule<TMessage>, IAsyncMessageRule
+    public abstract class AsyncMessageRuleBase<TMessage> : IAsyncMessageRule<TMessage>
     {
         public abstract bool Matches(TMessage incomingMessage);
 
-        public bool Matches(object incomingMessage) =>
-            incomingMessage is TMessage message
-            ? Matches(message)
-            : false;
+        [Obsolete("Response methods for raw objects are no longer required.")]
+        public bool Matches(object incomingMessage) => incomingMessage is TMessage message && Matches(message);
 
         /// <summary>
         /// Respond to an incoming message
@@ -29,6 +28,7 @@ namespace GravyBot
         /// </summary>
         /// <remarks>Used to handle non-generic implementation</remarks>
         /// <param name="incomingMessage">Incoming message</param>
+        [Obsolete("Response methods for raw objects are no longer required.")]
         public IAsyncEnumerable<IClientMessage> RespondAsync(object incomingMessage) =>
             incomingMessage is TMessage message
             ? RespondAsync(message)
@@ -41,7 +41,7 @@ namespace GravyBot
     /// Base provided for rules to inherit from
     /// </summary>
     /// <typeparam name="TMessage">Type of message to handle events for</typeparam>
-    public abstract class MessageRuleBase<TMessage> : IMessageRule<TMessage>, IMessageRule
+    public abstract class MessageRuleBase<TMessage> : IMessageRule<TMessage>
     {
         /// <summary>
         /// Respond to an incoming message
@@ -55,11 +55,13 @@ namespace GravyBot
         /// </summary>
         /// <remarks>Used to handle non-generic implementation</remarks>
         /// <param name="incomingMessage">Incoming message</param>
+        [Obsolete("Response methods for raw objects are no longer required.")]
         public IEnumerable<IClientMessage> Respond(object incomingMessage) =>
             incomingMessage is TMessage message
             ? Respond(message)
             : EmptyResult();
 
+        [Obsolete("Response methods for raw objects are no longer required.")]
         protected IEnumerable<IClientMessage> EmptyResult() => Enumerable.Empty<IClientMessage>();
     }
 }

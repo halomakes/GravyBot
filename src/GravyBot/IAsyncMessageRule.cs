@@ -1,4 +1,5 @@
 ﻿using GravyIrc.Messages;
+using System;
 using System.Collections.Generic;
 
 namespace GravyBot
@@ -6,6 +7,7 @@ namespace GravyBot
     /// <summary>
     /// A rule that can be applied to incoming messages
     /// </summary>
+    [Obsolete("Interface has been deprecated, please implement IAsyncMessageRule<TMessage> directly.")]
     public interface IAsyncMessageRule
     {
         /// <summary>
@@ -25,7 +27,7 @@ namespace GravyBot
     /// A rule that can be applied to incoming messages
     /// </summary>
     /// <typeparam name="TMessage"></typeparam>
-    public interface IAsyncMessageRule<TMessage> : IAsyncMessageRule
+    public interface IAsyncMessageRule<TMessage>
     {
         /// <summary>
         /// Process an inbound message
