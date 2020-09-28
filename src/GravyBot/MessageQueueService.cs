@@ -48,16 +48,16 @@ namespace GravyBot
         {
             using (var scope = serviceProvider.CreateScope())
             {
-                var rules = GetRules<IMessageRule, TMessage>(scope, typeof(IMessageRule<>)).DistinctBy(t => t.GetType());
+                var rules = scope.ServiceProvider.GetServices<IMessageRule<TMessage>>().DistinctBy(t => t.GetType());
                 rules.ToList().ForEach(ExecuteRule);
 
-                var asyncRules = GetRules<IAsyncMessageRule, TMessage>(scope, typeof(IAsyncMessageRule<>)).Where(r => r.Matches(message)).DistinctBy(t => t.GetType());
+                var asyncRules = scope.ServiceProvider.GetServices<IAsyncMessageRule<TMessage>>().DistinctBy(t => t.GetType()).Where(r => r.Matches(message));
                 var ruleTasks = asyncRules.Select(ExecuteRuleAsync);
 
                 await Task.WhenAll(ruleTasks);
             }
 
-            async Task ExecuteRuleAsync(IAsyncMessageRule rule)
+            async Task ExecuteRuleAsync(IAsyncMessageRule<TMessage> rule)
             {
                 try
                 {
@@ -72,7 +72,7 @@ namespace GravyBot
                 }
             }
 
-            void ExecuteRule(IMessageRule rule)
+            void ExecuteRule(IMessageRule<TMessage> rule)
             {
                 try
                 {
@@ -86,15 +86,6 @@ namespace GravyBot
                     Push(e);
                 }
             }
-        }
-
-        private static IEnumerable<TRule> GetRules<TRule, TMessage>(IServiceScope scope, Type genericType)
-        {
-            var rules = scope.ServiceProvider.GetServices<TRule>();
-            var matchingRuleType = genericType.MakeGenericType(typeof(TMessage));
-            var applicableRules = rules.Where(r => matchingRuleType.IsAssignableFrom(r.GetType()));
-
-            return applicableRules;
         }
 
         /// <summary>

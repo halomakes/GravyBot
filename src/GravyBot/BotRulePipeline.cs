@@ -37,9 +37,9 @@ namespace GravyBot
         /// </summary>
         /// <typeparam name="TRule"></typeparam>
         /// <typeparam name="TMessage"></typeparam>
-        public void RegisterAsyncRule<TRule, TMessage>() where TRule : class, IAsyncMessageRule<TMessage>, IAsyncMessageRule
+        public void RegisterAsyncRule<TRule, TMessage>() where TRule : class, IAsyncMessageRule<TMessage>
         {
-            services.AddScoped<IAsyncMessageRule, TRule>();
+            services.AddScoped<IAsyncMessageRule<TMessage>, TRule>();
             subscribedTypes.Add(typeof(TMessage));
         }
 
@@ -48,9 +48,9 @@ namespace GravyBot
         /// </summary>
         /// <typeparam name="TRule"></typeparam>
         /// <typeparam name="TMessage"></typeparam>
-        public void RegisterRule<TRule, TMessage>() where TRule : class, IMessageRule<TMessage>, IMessageRule
+        public void RegisterRule<TRule, TMessage>() where TRule : class, IMessageRule<TMessage>
         {
-            services.AddScoped<IMessageRule, TRule>();
+            services.AddScoped<IMessageRule<TMessage>, TRule>();
             subscribedTypes.Add(typeof(TMessage));
         }
     }

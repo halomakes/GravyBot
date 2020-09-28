@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace GravyBot.DefaultRules.Rules
 {
-    public class ExceptionLoggingRule : MessageRuleBase<Exception>, IMessageRule<Exception>
+    public class ExceptionLoggingRule : IMessageRule<Exception>
     {
         private readonly IrcBotConfiguration config;
 
@@ -14,9 +14,9 @@ namespace GravyBot.DefaultRules.Rules
             config = options.Value;
         }
 
-        public override IEnumerable<IClientMessage> Respond(Exception exception)
+        public IEnumerable<IClientMessage> Respond(Exception exception)
         {
-            yield return new NoticeMessage(config.LogChannel, $"{IrcValues.RED}Encountered {IrcValues.ITALIC}{exception.GetType().Name}{IrcValues.RESET} from {IrcValues.ORANGE}{IrcValues.BOLD}{exception.Source}");
+            yield return new PrivateMessage(config.LogChannel, $"{IrcValues.RED}Encountered {IrcValues.ITALIC}{exception.GetType().Name}{IrcValues.RESET} from {IrcValues.ORANGE}{IrcValues.BOLD}{exception.Source}");
 
             yield return new PrivateMessage(config.LogChannel, $"Base {exception.GetType().Name}: {exception.Message}");
 
