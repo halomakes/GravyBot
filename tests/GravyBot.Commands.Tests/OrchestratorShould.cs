@@ -117,6 +117,7 @@ namespace GravyBot.Commands.Tests
         [Fact]
         public async Task RateLimit()
         {
+            await Task.Delay(TimeSpan.FromSeconds(5));
             var msg = new PrivateMessage("#public", ".cb spam");
 
             // first message
@@ -135,6 +136,7 @@ namespace GravyBot.Commands.Tests
         [Fact]
         public async Task Allow_After_RateLimit()
         {
+            await Task.Delay(TimeSpan.FromSeconds(5));
             var msg = new PrivateMessage("#public", ".cb spam");
 
             // first message
@@ -153,6 +155,7 @@ namespace GravyBot.Commands.Tests
         [Fact]
         public async Task Not_Bump_RateLimit_After_Block()
         {
+            await Task.Delay(TimeSpan.FromSeconds(5));
             var msg = new PrivateMessage("#public", ".cb spam");
 
             // first message
@@ -251,7 +254,7 @@ namespace GravyBot.Commands.Tests
             [Command("publicize {commonKnowledge}"), ChannelOnly]
             public PrivateMessage AnnouncePublic(string commonKnowledge) => new PrivateMessage("nobody", commonKnowledge);
 
-            [Command("spam"), RateLimit(3, TimeUnit.Second)]
+            [Command("spam"), Command("spam2"), Command("spam3"), RateLimit(3, TimeUnit.Second)]
             public PrivateMessage Spam() => new PrivateMessage("nobody", "spam");
 
             [Command("annoy"), ChannelPolicy("noMain")]
