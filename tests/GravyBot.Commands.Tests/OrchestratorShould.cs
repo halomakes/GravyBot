@@ -82,7 +82,7 @@ namespace GravyBot.Commands.Tests
         }
 
         [Fact]
-        public async Task Allow_DirectOnly_In_Channel()
+        public async Task Allow_DirectOnly_In_Direct()
         {
             var msg = new PrivateMessage("private", ".cb secret i suck eggs");
             var responses = await orchestrator.RespondAsync(msg).ToListAsync();
@@ -91,6 +91,61 @@ namespace GravyBot.Commands.Tests
             var resp = responses.FirstOrDefault() as PrivateMessage;
             Assert.Equal("secret sealed", resp.Message);
         }
+
+        [Fact]
+        public async Task Block_ChannelOnly_In_Direct()
+        {
+            var msg = new PrivateMessage("private", ".cb publicize i suck eggs");
+            var responses = await orchestrator.RespondAsync(msg).ToListAsync();
+            Assert.NotEmpty(responses);
+            Assert.IsAssignableFrom<NoticeMessage>(responses.FirstOrDefault());
+        }
+
+        [Fact]
+        public async Task Allow_ChannelOnly_In_Channel()
+        {
+            var msg = new PrivateMessage("#public", ".cb publicize i suck eggs");
+            var responses = await orchestrator.RespondAsync(msg).ToListAsync();
+            Assert.NotEmpty(responses);
+            Assert.IsAssignableFrom<PrivateMessage>(responses.FirstOrDefault());
+            var resp = responses.FirstOrDefault() as PrivateMessage;
+            Assert.Equal("i suck eggs", resp.Message);
+        }
+
+        [Fact]
+        public async Task Should_RateLimit()
+        {
+            var msg = new PrivateMessage("#public", ".cb spam");
+
+            // first message
+            var initialResponses = await orchestrator.RespondAsync(msg).ToListAsync();
+            Assert.NotEmpty(initialResponses);
+            Assert.IsAssignableFrom<PrivateMessage>(initialResponses.FirstOrDefault());
+
+            // follow-up before rate limit
+            var spammyResponses = await orchestrator.RespondAsync(msg).ToListAsync();
+            Assert.NotEmpty(spammyResponses);
+            Assert.IsAssignableFrom<NoticeMessage>(spammyResponses.FirstOrDefault());
+        }
+
+        [Fact]
+        public async Task Should_Allow_After_RateLimit()
+        {
+            var msg = new PrivateMessage("#public", ".cb spam");
+
+            // first message
+            var initialResponses = await orchestrator.RespondAsync(msg).ToListAsync();
+            Assert.NotEmpty(initialResponses);
+            Assert.IsAssignableFrom<PrivateMessage>(initialResponses.FirstOrDefault());
+
+            await Task.Delay(TimeSpan.FromSeconds(4));
+
+            // follow-up before rate limit
+            var spammyResponses = await orchestrator.RespondAsync(msg).ToListAsync();
+            Assert.NotEmpty(spammyResponses);
+            Assert.IsAssignableFrom<PrivateMessage>(spammyResponses.FirstOrDefault());
+        }
+
 
         public class TestProcessor : CommandProcessor
         {
@@ -111,6 +166,12 @@ namespace GravyBot.Commands.Tests
 
             [Command("secret {dirty}"), DirectOnly]
             public PrivateMessage TakeSecret(string dirty) => new PrivateMessage("nobody", "secret sealed");
+
+            [Command("publicize {commonKnowledge}"), ChannelOnly]
+            public PrivateMessage AnnouncePublic(string commonKnowledge) => new PrivateMessage("nobody", commonKnowledge);
+
+            [Command("spam"), RateLimit(3, TimeUnit.Second)]
+            public PrivateMessage Spam() => new PrivateMessage("nobody", "spam");
         }
     }
 }
