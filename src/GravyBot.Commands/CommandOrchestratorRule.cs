@@ -17,7 +17,7 @@ namespace GravyBot.Commands
         private readonly IrcBotConfiguration configuration;
         private readonly ICommandProcessorProvider processorProvider;
         private readonly ICommandOrchestratorBuilder builder;
-        private readonly Dictionary<UserInvocation, DateTime> InvocationHistory = new Dictionary<UserInvocation, DateTime>();
+        private static readonly Dictionary<UserInvocation, DateTime> InvocationHistory = new Dictionary<UserInvocation, DateTime>();
 
         public CommandOrchestratorRule(IOptions<IrcBotConfiguration> options, ICommandOrchestratorBuilder builder, ICommandProcessorProvider processorProvider)
         {
@@ -53,7 +53,7 @@ namespace GravyBot.Commands
                     {
                         hasMainResponseBlocked = true;
                         var remainingTime = binding.RateLimitPeriod.Value - (now - previousInvocationTime);
-                        yield return new NoticeMessage(incomingMessage.From, $"You must wait {remainingTime} before using the {binding.Command.CommandName} command again.");
+                        yield return new NoticeMessage(incomingMessage.From, $"You must wait {remainingTime.ToFriendlyString()} before using the {binding.Command.CommandName} command again.");
                     }
                     else
                     {
