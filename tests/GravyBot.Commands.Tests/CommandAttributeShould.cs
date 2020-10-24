@@ -10,10 +10,10 @@ namespace GravyBot.Commands.Tests
         public void Parse_Command()
         {
             var command = "booru";
-            Assert.Equal(command.ToLower(), new CommandAttribute(command).Command);
-            Assert.Equal(command.ToLower(), new CommandAttribute($"{command} {{id}}").Command);
-            Assert.Equal(command.ToLower(), new CommandAttribute($"{command} {{id}} {{value}}").Command);
-            Assert.Equal(command.ToLower(), new CommandAttribute($"{command} {{id}} = {{value}}").Command);
+            Assert.Equal(command.ToLower(), new CommandAttribute(command).CommandName);
+            Assert.Equal(command.ToLower(), new CommandAttribute($"{command} {{id}}").CommandName);
+            Assert.Equal(command.ToLower(), new CommandAttribute($"{command} {{id}} {{value}}").CommandName);
+            Assert.Equal(command.ToLower(), new CommandAttribute($"{command} {{id}} = {{value}}").CommandName);
         }
 
         [Fact]

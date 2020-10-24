@@ -18,7 +18,7 @@ namespace GravyBot.Commands
 
         public string CommandFormat { get; private set; }
 
-        public string Command { get; private set; }
+        public string CommandName { get; private set; }
 
         public IEnumerable<string> ParameterNames { get; private set; }
 
@@ -38,7 +38,10 @@ namespace GravyBot.Commands
             var commandRgxSegments = split.Select(section => ParameterNames.Contains(section) ? paramReplacement : Regex.Escape(section));
             MatchingPattern = new Regex(string.Join(string.Empty, commandRgxSegments));
 
-            Command = commandFormat.Split(' ').First().Trim().ToLower();
+            CommandName = commandFormat.Split(' ').First().Trim().ToLower();
+
+            if (string.IsNullOrEmpty(CommandName))
+                throw new ArgumentException($"Command format must start with a non-whitespace/non-parameter keyword");
         }
     }
 }

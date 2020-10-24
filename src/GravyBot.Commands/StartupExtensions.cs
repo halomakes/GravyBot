@@ -13,7 +13,7 @@ namespace GravyBot.Commands
         }
         public static IServiceCollection AddCommandOrchestrator(this IServiceCollection services, Action<CommandOrchestratorBuilder> configureOrchestrator)
         {
-            var builder = new CommandOrchestratorBuilder();
+            var builder = new CommandOrchestratorBuilder(services);
             configureOrchestrator(builder);
             services.AddSingleton(provider => builder);
 
