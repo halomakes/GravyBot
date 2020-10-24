@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravyBot", "src\GravyBot\Gr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravyBot.SampleRules", "src\GravyBot.SampleRules\GravyBot.SampleRules.csproj", "{A0055F1F-055C-4439-8AAB-B5FFB25C3A0F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GravyBot.Commands", "src\GravyBot.Commands\GravyBot.Commands.csproj", "{35EE9817-ADBE-481B-AF02-BBE3FB5E2317}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GravyBot.Commands.Tests", "tests\GravyBot.Commands.Tests\GravyBot.Commands.Tests.csproj", "{BB6DEA6A-2721-4D3E-A77B-E936D3136F35}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{A0055F1F-055C-4439-8AAB-B5FFB25C3A0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0055F1F-055C-4439-8AAB-B5FFB25C3A0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0055F1F-055C-4439-8AAB-B5FFB25C3A0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35EE9817-ADBE-481B-AF02-BBE3FB5E2317}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35EE9817-ADBE-481B-AF02-BBE3FB5E2317}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35EE9817-ADBE-481B-AF02-BBE3FB5E2317}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35EE9817-ADBE-481B-AF02-BBE3FB5E2317}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB6DEA6A-2721-4D3E-A77B-E936D3136F35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB6DEA6A-2721-4D3E-A77B-E936D3136F35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB6DEA6A-2721-4D3E-A77B-E936D3136F35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB6DEA6A-2721-4D3E-A77B-E936D3136F35}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

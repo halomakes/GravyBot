@@ -7,6 +7,10 @@ jobs:
       if: branch != docs
       install: dotnet restore
       script: dotnet build
+    - stage: "Test"
+      if: branch != docs
+      install: dotnet restore
+      script: dotnet test
     - stage: "Generate Documentation"
       if: branch = master OR branch = docs
       install:

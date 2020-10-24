@@ -13,6 +13,7 @@
     <Version>1.4.0</Version>
     <UserSecretsId>a20bff03-8657-40ec-8c3f-a43a17e35cfa</UserSecretsId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Authors>Alex Griffith</Authors>
+    <Description>Command structure for GravyBot</Description>
+    <PackageProjectUrl>https://gravybot.halomademeapc.com</PackageProjectUrl>
+    <PackageIcon>logo.png</PackageIcon>
+    <RepositoryUrl>https://github.com/halomademeapc/GravyBot</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageTags>irc,bot</PackageTags>
+    <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+    <Version>1.0.0-alpha3</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\logo.png" Link="logo.png">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GravyBot\GravyBot.csproj" />
+  </ItemGroup>
+
+</Project>
