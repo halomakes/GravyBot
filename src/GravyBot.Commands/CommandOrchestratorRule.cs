@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace GravyBot.Commands
 {
+    /// <summary>
+    /// Pipeline rule that handles commands
+    /// </summary>
     public class CommandOrchestratorRule : IAsyncMessageRule<PrivateMessage>
     {
         private readonly IrcBotConfiguration configuration;
@@ -25,8 +28,12 @@ namespace GravyBot.Commands
 
         public bool Matches(PrivateMessage incomingMessage)
         {
-            var binding = GetBinding(incomingMessage.Message);
-            return binding.HasValue && binding.Value.Value.Command.MatchingPattern.IsMatch(incomingMessage.Message);
+            if (HasBinding(incomingMessage.Message))
+            {
+                var binding = GetBinding(incomingMessage.Message);
+                return binding.HasValue && binding.Value.Value.Command.MatchingPattern.IsMatch(incomingMessage.Message);
+            }
+            return false;
         }
 
         public async IAsyncEnumerable<IClientMessage> RespondAsync(PrivateMessage incomingMessage)
@@ -136,7 +143,15 @@ namespace GravyBot.Commands
             }
         }
 
-
+        private bool HasBinding(string message)
+        {
+            if (message.StartsWith(configuration.CommandPrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                var commandSegment = message.Remove(0, configuration.CommandPrefix.Length);
+                return builder.Bindings.Any(p => commandSegment.StartsWith(p.Key, StringComparison.OrdinalIgnoreCase));
+            }
+            return false;
+        }
 
         private KeyValuePair<string, CommandBinding>? GetBinding(string message)
         {

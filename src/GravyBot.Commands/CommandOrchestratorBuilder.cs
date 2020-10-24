@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace GravyBot.Commands
@@ -17,6 +18,16 @@ namespace GravyBot.Commands
         private readonly Dictionary<string, ChannelPolicy> policies = new Dictionary<string, ChannelPolicy>();
         public IReadOnlyDictionary<string, CommandBinding> Bindings => bindings;
         public IReadOnlyDictionary<string, ChannelPolicy> Policies => policies;
+
+        public virtual void RegisterProcessors(Assembly assembly)
+        {
+            var method = typeof(CommandOrchestratorBuilder).GetMethod(nameof(RegisterProcessor));
+            foreach (var processorType in assembly.GetTypes().Where(t => typeof(CommandProcessor).IsAssignableFrom(t)))
+            {
+                var genericMethod = method.MakeGenericMethod(processorType);
+                genericMethod.Invoke(this, default);
+            }
+        }
 
         public virtual void RegisterProcessor<TProcessor>() where TProcessor : CommandProcessor
         {
@@ -44,6 +55,7 @@ namespace GravyBot.Commands
             Mode = mode
         });
 
+        
         public void AddChannelPolicy(string policyName, ChannelPolicy policy)
         {
             policies[policyName] = policy;

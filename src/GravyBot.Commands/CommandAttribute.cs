@@ -4,23 +4,42 @@ using System.Text.RegularExpressions;
 
 namespace GravyBot.Commands
 {
+    /// <summary>
+    /// Indicates that a method is an IRC command
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class CommandAttribute : Attribute
     {
         private static readonly Regex ParameterRgx = new Regex(@"\{([^\{\}]+)\}+", RegexOptions.Compiled); // params indicated with {paramName}
 
+        /// <summary>
+        /// Indicate that a method is an IRC command
+        /// </summary>
+        /// <param name="commandFormat">Format structure to match</param>
         public CommandAttribute(string commandFormat)
         {
             CommandFormat = commandFormat;
             ParseCommandFormat(commandFormat);
         }
 
+        /// <summary>
+        /// Raw format specifier
+        /// </summary>
         public string CommandFormat { get; private set; }
 
+        /// <summary>
+        /// Name of command
+        /// </summary>
         public string CommandName { get; private set; }
 
+        /// <summary>
+        /// Names of parameters
+        /// </summary>
         public string[] ParameterNames { get; private set; }
 
+        /// <summary>
+        /// Regular expression to check against message text
+        /// </summary>
         public Regex MatchingPattern { get; private set; }
 
         private void ParseCommandFormat(string commandFormat)
