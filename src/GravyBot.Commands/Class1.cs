@@ -60,16 +60,16 @@ namespace GravyBot.Commands
         private void ParseCommandFormat(string commandFormat)
         {
             var matches = ParameterRgx.Matches(commandFormat);
-            ParameterNames = matches.Select(m => m.Groups[1].Value);
+            ParameterNames = matches.Select(m => m.Groups[1].Value.Trim());
 
-            var duplicateKey = ParameterNames.GroupBy(n => n.ToLower()).FirstOrDefault(g => g.Count() > 1);
+            var duplicateKey = ParameterNames.GroupBy(n => n).FirstOrDefault(g => g.Count() > 1);
             if (duplicateKey != default)
-                throw new ArgumentException($"Multiple parameters specified with name ${duplicateKey.Key}");
+                throw new ArgumentException($"Multiple parameters defined with name {duplicateKey.Key}");
 
             var paramReplacement = @"(.+)";
             var split = ParameterRgx.Split(commandFormat);
             var commandRgxSegments = split.Select(section => ParameterNames.Contains(section) ? paramReplacement : Regex.Escape(section));
-            MatchingPattern = new Regex(string.Join(string.Empty, split));
+            MatchingPattern = new Regex(string.Join(string.Empty, commandRgxSegments));
 
             Command = commandFormat.Split(' ').First().Trim().ToLower();
         }
