@@ -15,6 +15,8 @@ namespace GravyBot.Commands
         public bool IsRateLimited => RateLimitPeriod.HasValue;
         public bool IsAsync;
         public bool ProducesMultipleResponses;
+        public string PolicyName;
+        public bool HasPolicy => !string.IsNullOrEmpty(PolicyName);
         public CommandAttribute Command;
 
         public CommandBinding(CommandAttribute command, MethodInfo method)
@@ -29,6 +31,7 @@ namespace GravyBot.Commands
             IsAsync = typeof(Task<IClientMessage>).IsAssignableFrom(method.ReturnType) || typeof(IAsyncEnumerable<IClientMessage>).IsAssignableFrom(method.ReturnType);
             ProducesMultipleResponses = typeof(IEnumerable<IClientMessage>).IsAssignableFrom(method.ReturnType) || typeof(IAsyncEnumerable<IClientMessage>).IsAssignableFrom(method.ReturnType);
             Command = command;
+            PolicyName = method.GetAttribute<ChannelPolicyAttribute>()?.PolicyName;
 
             if (IsChannelOnly && IsDirectOnly)
                 throw new ArgumentException($"A command cannot be limited to both only channels and only direct messages.");

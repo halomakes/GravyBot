@@ -14,7 +14,9 @@ namespace GravyBot.Commands
         }
 
         private readonly Dictionary<string, CommandBinding> bindings = new Dictionary<string, CommandBinding>();
+        private readonly Dictionary<string, ChannelPolicy> policies = new Dictionary<string, ChannelPolicy>();
         public IReadOnlyDictionary<string, CommandBinding> Bindings => bindings;
+        public IReadOnlyDictionary<string, ChannelPolicy> Policies => policies;
 
         public virtual void RegisterProcessor<TProcessor>() where TProcessor : CommandProcessor
         {
@@ -36,5 +38,15 @@ namespace GravyBot.Commands
             bindings[command.CommandName] = new CommandBinding(command, method);
         }
 
+        public void AddChannelPolicy(string policyName, IEnumerable<string> channels, ChannelPolicy.PolicyMode mode) => AddChannelPolicy(policyName, new ChannelPolicy
+        {
+            Channels = channels,
+            Mode = mode
+        });
+
+        public void AddChannelPolicy(string policyName, ChannelPolicy policy)
+        {
+            policies[policyName] = policy;
+        }
     }
 }

@@ -42,17 +42,16 @@ namespace GravyBot.Commands
                 {
                     var key = new UserInvocation(incomingMessage.From, incomingMessage.To, binding.Command.CommandName);
                     var now = DateTime.Now;
-                    if (incomingMessage.IsChannelMessage && InvocationHistory.TryGetValue(key, out var previousInvocationTime))
+                    if (incomingMessage.IsChannelMessage && InvocationHistory.TryGetValue(key, out var previousInvocationTime) && now - previousInvocationTime < binding.RateLimitPeriod)
                     {
-                        if (now - previousInvocationTime < binding.RateLimitPeriod)
-                        {
-                            hasMainResponseBlocked = true;
-                            var remainingTime = binding.RateLimitPeriod.Value - (now - previousInvocationTime);
-                            yield return new NoticeMessage(incomingMessage.From, $"You must wait {remainingTime} before using the {binding.Command.CommandName} command again.");
-                        }
+                        hasMainResponseBlocked = true;
+                        var remainingTime = binding.RateLimitPeriod.Value - (now - previousInvocationTime);
+                        yield return new NoticeMessage(incomingMessage.From, $"You must wait {remainingTime} before using the {binding.Command.CommandName} command again.");
                     }
-
-                    InvocationHistory[key] = now;
+                    else
+                    {
+                        InvocationHistory[key] = now;
+                    }
                 }
 
                 if (binding.IsChannelOnly && !incomingMessage.IsChannelMessage)
@@ -65,6 +64,20 @@ namespace GravyBot.Commands
                 {
                     hasMainResponseBlocked = true;
                     yield return new NoticeMessage(incomingMessage.From, $"The {binding.Command.CommandName} command can only be used in direct messages.");
+                }
+
+                if (binding.HasPolicy && incomingMessage.IsChannelMessage)
+                {
+                    if (!builder.Policies.ContainsKey(binding.PolicyName))
+                        throw new InvalidPolicyException(binding.PolicyName);
+
+                    var policy = builder.Policies[binding.PolicyName];
+
+                    if (policy.Blocks(incomingMessage))
+                    {
+                        hasMainResponseBlocked = true;
+                        yield return new NoticeMessage(incomingMessage.From, $"Use of the {binding.Command.CommandName} command has been disabled in {incomingMessage.To}.");
+                    }
                 }
 
                 if (!hasMainResponseBlocked)

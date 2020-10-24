@@ -19,6 +19,8 @@ namespace GravyBot.Commands.Tests
             });
             var builder = new MockOrchestratorBuilder();
             builder.RegisterProcessor<TestProcessor>();
+            builder.AddChannelPolicy("noMain", new string[] { "#main" }, ChannelPolicy.PolicyMode.Blacklist);
+            builder.AddChannelPolicy("onlyMain", new string[] { "#main" }, ChannelPolicy.PolicyMode.Whitelist);
             orchestrator = new CommandOrchestratorRule(opts, builder, new MockProcessorProvider<TestProcessor>());
         }
 
@@ -113,7 +115,7 @@ namespace GravyBot.Commands.Tests
         }
 
         [Fact]
-        public async Task Should_RateLimit()
+        public async Task RateLimit()
         {
             var msg = new PrivateMessage("#public", ".cb spam");
 
@@ -122,6 +124,8 @@ namespace GravyBot.Commands.Tests
             Assert.NotEmpty(initialResponses);
             Assert.IsAssignableFrom<PrivateMessage>(initialResponses.FirstOrDefault());
 
+            await Task.Delay(TimeSpan.FromSeconds(2));
+
             // follow-up before rate limit
             var spammyResponses = await orchestrator.RespondAsync(msg).ToListAsync();
             Assert.NotEmpty(spammyResponses);
@@ -129,7 +133,7 @@ namespace GravyBot.Commands.Tests
         }
 
         [Fact]
-        public async Task Should_Allow_After_RateLimit()
+        public async Task Allow_After_RateLimit()
         {
             var msg = new PrivateMessage("#public", ".cb spam");
 
@@ -144,6 +148,83 @@ namespace GravyBot.Commands.Tests
             var spammyResponses = await orchestrator.RespondAsync(msg).ToListAsync();
             Assert.NotEmpty(spammyResponses);
             Assert.IsAssignableFrom<PrivateMessage>(spammyResponses.FirstOrDefault());
+        }
+
+        [Fact]
+        public async Task Not_Bump_RateLimit_After_Block()
+        {
+            var msg = new PrivateMessage("#public", ".cb spam");
+
+            // first message
+            var initialResponses = await orchestrator.RespondAsync(msg).ToListAsync();
+            Assert.NotEmpty(initialResponses);
+            Assert.IsAssignableFrom<PrivateMessage>(initialResponses.FirstOrDefault());
+
+            await Task.Delay(TimeSpan.FromSeconds(2));
+
+            // follow-up before rate limit
+            var spammyResponses = await orchestrator.RespondAsync(msg).ToListAsync();
+            Assert.NotEmpty(spammyResponses);
+            Assert.IsAssignableFrom<NoticeMessage>(spammyResponses.FirstOrDefault());
+
+            await Task.Delay(TimeSpan.FromSeconds(2));
+
+            // follow-up after rate limit
+            spammyResponses = await orchestrator.RespondAsync(msg).ToListAsync();
+            Assert.NotEmpty(spammyResponses);
+            Assert.IsAssignableFrom<PrivateMessage>(spammyResponses.FirstOrDefault());
+        }
+
+        [Fact]
+        public async Task Block_In_NonWhitelisted_Channel()
+        {
+            var msg = new PrivateMessage("#secondary", ".cb unannoy");
+
+            // first message
+            var initialResponses = await orchestrator.RespondAsync(msg).ToListAsync();
+            Assert.NotEmpty(initialResponses);
+            Assert.IsAssignableFrom<NoticeMessage>(initialResponses.FirstOrDefault());
+        }
+
+        [Fact]
+        public async Task Allow_In_Whitelisted_Channel()
+        {
+            var msg = new PrivateMessage("#main", ".cb unannoy");
+
+            // first message
+            var initialResponses = await orchestrator.RespondAsync(msg).ToListAsync();
+            Assert.NotEmpty(initialResponses);
+            Assert.IsAssignableFrom<PrivateMessage>(initialResponses.FirstOrDefault());
+        }
+
+        [Fact]
+        public async Task Block_In_Blacklisted_Channel()
+        {
+            var msg = new PrivateMessage("#main", ".cb annoy");
+
+            // first message
+            var initialResponses = await orchestrator.RespondAsync(msg).ToListAsync();
+            Assert.NotEmpty(initialResponses);
+            Assert.IsAssignableFrom<NoticeMessage>(initialResponses.FirstOrDefault());
+        }
+
+        [Fact]
+        public async Task Allow_In_NonBlacklisted_Channel()
+        {
+            var msg = new PrivateMessage("#secondary", ".cb annoy");
+
+            // first message
+            var initialResponses = await orchestrator.RespondAsync(msg).ToListAsync();
+            Assert.NotEmpty(initialResponses);
+            Assert.IsAssignableFrom<PrivateMessage>(initialResponses.FirstOrDefault());
+        }
+
+        [Fact]
+        public async Task Throw_On_Bad_PolicyName()
+        {
+            var msg = new PrivateMessage("#secondary", ".cb nope");
+
+            await Assert.ThrowsAsync<InvalidPolicyException>(async () => await orchestrator.RespondAsync(msg).ToListAsync());
         }
 
 
@@ -172,6 +253,15 @@ namespace GravyBot.Commands.Tests
 
             [Command("spam"), RateLimit(3, TimeUnit.Second)]
             public PrivateMessage Spam() => new PrivateMessage("nobody", "spam");
+
+            [Command("annoy"), ChannelPolicy("noMain")]
+            public PrivateMessage NoMain() => new PrivateMessage("nobody", "spam");
+
+            [Command("unannoy"), ChannelPolicy("onlyMain")]
+            public PrivateMessage MainOnly() => new PrivateMessage("nobody", "spam");
+
+            [Command("nope"), ChannelPolicy("nonexistent")]
+            public PrivateMessage WontWork() => default;
         }
     }
 }
