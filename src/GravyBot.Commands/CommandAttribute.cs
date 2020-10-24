@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -20,14 +19,14 @@ namespace GravyBot.Commands
 
         public string CommandName { get; private set; }
 
-        public IEnumerable<string> ParameterNames { get; private set; }
+        public string[] ParameterNames { get; private set; }
 
         public Regex MatchingPattern { get; private set; }
 
         private void ParseCommandFormat(string commandFormat)
         {
             var matches = ParameterRgx.Matches(commandFormat);
-            ParameterNames = matches.Select(m => m.Groups[1].Value.Trim());
+            ParameterNames = matches.Select(m => m.Groups[1].Value.Trim()).ToArray();
 
             var duplicateKey = ParameterNames.GroupBy(n => n).FirstOrDefault(g => g.Count() > 1);
             if (duplicateKey != default)

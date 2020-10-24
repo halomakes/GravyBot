@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace GravyBot.Commands
@@ -67,29 +69,55 @@ namespace GravyBot.Commands
                 if (binding.IsAsync)
                 {
                     if (binding.ProducesMultipleResponses)
-                        foreach (var r in InvokeMultiple(binding, incomingMessage))
+                        foreach (var r in Invoke<IEnumerable<IClientMessage>>(binding, incomingMessage))
                             yield return r;
                     else
-                        yield return InvokeSingle(binding, incomingMessage);
+                        yield return Invoke<IClientMessage>(binding, incomingMessage);
                 }
                 else
                 {
                     if (binding.ProducesMultipleResponses)
-                        await foreach (var r in InvokeMultipleAsync(binding, incomingMessage))
+                        await foreach (var r in Invoke<IAsyncEnumerable<IClientMessage>>(binding, incomingMessage))
                             yield return r;
                     else
-                        yield return await InvokeSingleAsync(binding, incomingMessage);
+                        yield return await Invoke<Task<IClientMessage>>(binding, incomingMessage);
                 }
             }
         }
 
-        private IClientMessage InvokeSingle(CommandBinding binding, PrivateMessage message) { throw new NotImplementedException(); }
+        private TResult Invoke<TResult>(CommandBinding binding, PrivateMessage message) =>
+            (TResult)binding.Method.Invoke(GetProcessor(binding, message), GetArguments(binding, message.Message));
 
-        private IEnumerable<IClientMessage> InvokeMultiple(CommandBinding binding, PrivateMessage message) { throw new NotImplementedException(); }
+        private object[] GetArguments(CommandBinding binding, string message)
+        {
+            var match = binding.Command.MatchingPattern.Match(message);
+            return binding.Method.GetParameters().Select(GetArgument).ToArray();
 
-        private async Task<IClientMessage> InvokeSingleAsync(CommandBinding binding, PrivateMessage message) { throw new NotImplementedException(); }
-
-        private async IAsyncEnumerable<IClientMessage> InvokeMultipleAsync(CommandBinding binding, PrivateMessage message) { throw new NotImplementedException(); }
+            object GetArgument(ParameterInfo paramInfo)
+            {
+                var indexInCommand = Array.IndexOf(binding.Command.ParameterNames, paramInfo.Name);
+                if (indexInCommand > -1)
+                {
+                    var matchingGroup = match.Groups[indexInCommand];
+                    if (matchingGroup.Success)
+                    {
+                        var converter = TypeDescriptor.GetConverter(paramInfo.ParameterType);
+                        if (converter.CanConvertFrom(typeof(string)))
+                        {
+                            try
+                            {
+                                return converter.ConvertFromString(matchingGroup.Value);
+                            }
+                            catch (NotSupportedException)
+                            {
+                                return null;
+                            }
+                        }
+                    }
+                }
+                return null;
+            }
+        }
 
         private CommandProcessor GetProcessor(CommandBinding binding, PrivateMessage message)
         {
