@@ -15,7 +15,8 @@ namespace GravyBot.Commands
         {
             var builder = new CommandOrchestratorBuilder(services);
             configureOrchestrator(builder);
-            services.AddSingleton(provider => builder);
+            services.AddSingleton<ICommandOrchestratorBuilder>(provider => builder);
+            services.AddTransient<ICommandProcessorProvider, CommandProcessorProvider>();
 
             return services;
         }

@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace GravyBot.Commands
 {
-    public class CommandOrchestratorBuilder
+    public class CommandOrchestratorBuilder : ICommandOrchestratorBuilder
     {
         private readonly IServiceCollection serviceCollection;
 
@@ -16,7 +16,7 @@ namespace GravyBot.Commands
         private readonly Dictionary<string, CommandBinding> bindings = new Dictionary<string, CommandBinding>();
         public IReadOnlyDictionary<string, CommandBinding> Bindings => bindings;
 
-        public void RegisterProcessor<TProcessor>() where TProcessor : CommandProcessor
+        public virtual void RegisterProcessor<TProcessor>() where TProcessor : CommandProcessor
         {
             foreach (var method in typeof(TProcessor).GetMethods())
                 foreach (var command in method.GetCommands())
@@ -25,7 +25,7 @@ namespace GravyBot.Commands
             serviceCollection.AddScoped<TProcessor>();
         }
 
-        private void RegisterCommand(CommandAttribute command, MethodInfo method)
+        protected void RegisterCommand(CommandAttribute command, MethodInfo method)
         {
             if (bindings.ContainsKey(command.CommandName))
             {

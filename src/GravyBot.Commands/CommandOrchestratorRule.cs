@@ -12,15 +12,15 @@ namespace GravyBot.Commands
     public class CommandOrchestratorRule : IAsyncMessageRule<PrivateMessage>
     {
         private readonly IrcBotConfiguration configuration;
-        private readonly IServiceProvider serviceProvider;
-        private readonly CommandOrchestratorBuilder builder;
+        private readonly ICommandProcessorProvider processorProvider;
+        private readonly ICommandOrchestratorBuilder builder;
         private readonly Dictionary<UserInvocation, DateTime> InvocationHistory = new Dictionary<UserInvocation, DateTime>();
 
-        public CommandOrchestratorRule(IOptions<IrcBotConfiguration> options, CommandOrchestratorBuilder builder, IServiceProvider serviceProvider)
+        public CommandOrchestratorRule(IOptions<IrcBotConfiguration> options, ICommandOrchestratorBuilder builder, ICommandProcessorProvider processorProvider)
         {
             configuration = options.Value;
             this.builder = builder;
-            this.serviceProvider = serviceProvider;
+            this.processorProvider = processorProvider;
         }
 
         public bool Matches(PrivateMessage incomingMessage)
@@ -31,62 +31,66 @@ namespace GravyBot.Commands
 
         public async IAsyncEnumerable<IClientMessage> RespondAsync(PrivateMessage incomingMessage)
         {
-            var binding = GetBinding(incomingMessage.Message).Value.Value;
+            var pair = GetBinding(incomingMessage.Message);
 
-            bool hasMainResponseBlocked = false;
-
-            if (binding.IsRateLimited)
+            if (pair?.Value.Command != default)
             {
-                var key = new UserInvocation(incomingMessage.From, incomingMessage.To, binding.Command.CommandName);
-                var now = DateTime.Now;
-                if (incomingMessage.IsChannelMessage && InvocationHistory.TryGetValue(key, out var previousInvocationTime))
+                var binding = pair.Value.Value;
+                bool hasMainResponseBlocked = false;
+
+                if (binding.IsRateLimited)
                 {
-                    if (now - previousInvocationTime < binding.RateLimitPeriod)
+                    var key = new UserInvocation(incomingMessage.From, incomingMessage.To, binding.Command.CommandName);
+                    var now = DateTime.Now;
+                    if (incomingMessage.IsChannelMessage && InvocationHistory.TryGetValue(key, out var previousInvocationTime))
                     {
-                        hasMainResponseBlocked = true;
-                        var remainingTime = binding.RateLimitPeriod.Value - (now - previousInvocationTime);
-                        yield return new NoticeMessage(incomingMessage.From, $"You must wait {remainingTime} before using the {binding.Command.CommandName} command again.");
+                        if (now - previousInvocationTime < binding.RateLimitPeriod)
+                        {
+                            hasMainResponseBlocked = true;
+                            var remainingTime = binding.RateLimitPeriod.Value - (now - previousInvocationTime);
+                            yield return new NoticeMessage(incomingMessage.From, $"You must wait {remainingTime} before using the {binding.Command.CommandName} command again.");
+                        }
                     }
+
+                    InvocationHistory[key] = now;
                 }
 
-                InvocationHistory[key] = now;
-            }
-
-            if (binding.IsChannelOnly && !incomingMessage.IsChannelMessage)
-            {
-                hasMainResponseBlocked = true;
-                yield return new NoticeMessage(incomingMessage.From, $"The {binding.Command.CommandName} command can only be used in channels.");
-            }
-
-            if (binding.IsDirectOnly && incomingMessage.IsChannelMessage)
-            {
-                hasMainResponseBlocked = true;
-                yield return new NoticeMessage(incomingMessage.From, $"The {binding.Command.CommandName} command can only be used in direct messages.");
-            }
-
-            if (!hasMainResponseBlocked)
-            {
-                if (binding.IsAsync)
+                if (binding.IsChannelOnly && !incomingMessage.IsChannelMessage)
                 {
-                    if (binding.ProducesMultipleResponses)
-                        foreach (var r in Invoke<IEnumerable<IClientMessage>>(binding, incomingMessage))
-                            yield return r;
-                    else
-                        yield return Invoke<IClientMessage>(binding, incomingMessage);
+                    hasMainResponseBlocked = true;
+                    yield return new NoticeMessage(incomingMessage.From, $"The {binding.Command.CommandName} command can only be used in channels.");
                 }
-                else
+
+                if (binding.IsDirectOnly && incomingMessage.IsChannelMessage)
                 {
-                    if (binding.ProducesMultipleResponses)
-                        await foreach (var r in Invoke<IAsyncEnumerable<IClientMessage>>(binding, incomingMessage))
-                            yield return r;
+                    hasMainResponseBlocked = true;
+                    yield return new NoticeMessage(incomingMessage.From, $"The {binding.Command.CommandName} command can only be used in direct messages.");
+                }
+
+                if (!hasMainResponseBlocked)
+                {
+                    if (binding.IsAsync)
+                    {
+                        if (binding.ProducesMultipleResponses)
+                            await foreach (var r in Invoke<IAsyncEnumerable<IClientMessage>>(binding, incomingMessage))
+                                yield return r;
+                        else
+                            yield return await Invoke<Task<IClientMessage>>(binding, incomingMessage);
+                    }
                     else
-                        yield return await Invoke<Task<IClientMessage>>(binding, incomingMessage);
+                    {
+                        if (binding.ProducesMultipleResponses)
+                            foreach (var r in Invoke<IEnumerable<IClientMessage>>(binding, incomingMessage))
+                                yield return r;
+                        else
+                            yield return Invoke<IClientMessage>(binding, incomingMessage);
+                    }
                 }
             }
         }
 
         private TResult Invoke<TResult>(CommandBinding binding, PrivateMessage message) =>
-            (TResult)binding.Method.Invoke(GetProcessor(binding, message), GetArguments(binding, message.Message));
+            (TResult)binding.Method.Invoke(processorProvider.GetProcessor(binding, message), GetArguments(binding, message.Message));
 
         private object[] GetArguments(CommandBinding binding, string message)
         {
@@ -98,7 +102,7 @@ namespace GravyBot.Commands
                 var indexInCommand = Array.IndexOf(binding.Command.ParameterNames, paramInfo.Name);
                 if (indexInCommand > -1)
                 {
-                    var matchingGroup = match.Groups[indexInCommand];
+                    var matchingGroup = match.Groups[indexInCommand + 1];
                     if (matchingGroup.Success)
                     {
                         var converter = TypeDescriptor.GetConverter(paramInfo.ParameterType);
@@ -119,13 +123,7 @@ namespace GravyBot.Commands
             }
         }
 
-        private CommandProcessor GetProcessor(CommandBinding binding, PrivateMessage message)
-        {
-            var processor = serviceProvider.GetService(binding.Method.ReflectedType) as CommandProcessor;
-            processor.IncomingMessage = message;
-            processor.TriggeringCommandName = binding.Command.CommandName;
-            return processor;
-        }
+
 
         private KeyValuePair<string, CommandBinding>? GetBinding(string message)
         {

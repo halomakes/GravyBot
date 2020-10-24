@@ -11,7 +11,7 @@ namespace GravyBot.Commands.Tests
         [Fact]
         public void Thow_On_Duplicate_Command()
         {
-            var builder = new CommandOrchestratorBuilder();
+            var builder = new MockOrchestratorBuilder();
             Assert.Throws<DuplicateCommandException>(() => builder.RegisterProcessor<DuplicateCommandProcessor>());
         }
 
@@ -27,7 +27,7 @@ namespace GravyBot.Commands.Tests
         [Fact]
         public void Throw_On_Bad_Return()
         {
-            var builder = new CommandOrchestratorBuilder();
+            var builder = new MockOrchestratorBuilder();
             Assert.Throws<ArgumentException>(() => builder.RegisterProcessor<BadReturnProcessor>());
         }
 
@@ -40,7 +40,7 @@ namespace GravyBot.Commands.Tests
         [Fact]
         public void Allow_IClientMessage_Return_Types()
         {
-            var builder = new CommandOrchestratorBuilder();
+            var builder = new MockOrchestratorBuilder();
             builder.RegisterProcessor<ReturnTestProcessor>();
         }
 
