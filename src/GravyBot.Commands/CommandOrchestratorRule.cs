@@ -130,7 +130,7 @@ namespace GravyBot.Commands
                         {
                             try
                             {
-                                return converter.ConvertFromString(matchingGroup.Value);
+                                return converter.ConvertFromString(matchingGroup.Value?.Trim());
                             }
                             catch (NotSupportedException)
                             {
