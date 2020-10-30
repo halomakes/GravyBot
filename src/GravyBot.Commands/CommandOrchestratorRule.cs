@@ -26,15 +26,7 @@ namespace GravyBot.Commands
             this.processorProvider = processorProvider;
         }
 
-        public bool Matches(PrivateMessage incomingMessage)
-        {
-            if (HasBinding(incomingMessage.Message))
-            {
-                var binding = GetBinding(incomingMessage.Message);
-                return binding.HasValue && binding.Value.Value.Command.MatchingPattern.IsMatch(incomingMessage.Message);
-            }
-            return false;
-        }
+        public bool Matches(PrivateMessage incomingMessage) => HasBinding(incomingMessage.Message);
 
         public async IAsyncEnumerable<IClientMessage> RespondAsync(PrivateMessage incomingMessage)
         {
@@ -124,6 +116,11 @@ namespace GravyBot.Commands
         private object[] GetArguments(CommandBinding binding, string message)
         {
             var match = binding.Command.MatchingPattern.Match(message);
+
+            // handle parameterless calls
+            if (!match.Success)
+                binding.Method.GetParameters().Select<ParameterInfo, object>(_ => null).ToArray();
+
             return binding.Method.GetParameters().Select(GetArgument).ToArray();
 
             object GetArgument(ParameterInfo paramInfo)
