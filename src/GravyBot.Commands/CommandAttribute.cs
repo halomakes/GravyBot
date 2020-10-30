@@ -61,7 +61,7 @@ namespace GravyBot.Commands
             var commandRgxSegments = split.Select(section => ParameterNames.Contains(section) ? paramReplacement : Regex.Escape(section));
             MatchingPattern = new Regex(string.Join(string.Empty, commandRgxSegments));
 
-            CommandName = commandFormat.Split(' ').First().Trim().ToLower();
+            CommandName = ParameterRgx.Split(commandFormat).First().Trim().ToLower();
 
             if (string.IsNullOrEmpty(CommandName))
                 throw new ArgumentException($"Command format must start with a non-whitespace/non-parameter keyword");

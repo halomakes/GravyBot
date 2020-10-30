@@ -44,20 +44,16 @@ namespace GravyBot.Commands
             {
                 var binding = pair.Value.Value;
                 bool hasMainResponseBlocked = false;
+                var key = new UserInvocation(incomingMessage.From, incomingMessage.To, binding.Command.CommandName);
+                var now = DateTime.Now;
 
                 if (binding.IsRateLimited)
                 {
-                    var key = new UserInvocation(incomingMessage.From, incomingMessage.To, binding.Command.CommandName);
-                    var now = DateTime.Now;
                     if (incomingMessage.IsChannelMessage && InvocationHistory.TryGetValue(key, out var previousInvocationTime) && now - previousInvocationTime < binding.RateLimitPeriod)
                     {
                         hasMainResponseBlocked = true;
                         var remainingTime = binding.RateLimitPeriod.Value - (now - previousInvocationTime);
                         yield return new NoticeMessage(incomingMessage.From, $"You must wait {remainingTime.ToFriendlyString()} before using the {binding.Command.CommandName} command again.");
-                    }
-                    else
-                    {
-                        InvocationHistory[key] = now;
                     }
                 }
 
@@ -89,6 +85,8 @@ namespace GravyBot.Commands
 
                 if (!hasMainResponseBlocked)
                 {
+                    var bypassRatelimit = false;
+
                     if (binding.IsAsync)
                     {
                         if (binding.ProducesMultipleResponses)
@@ -105,12 +103,23 @@ namespace GravyBot.Commands
                         else
                             yield return Invoke<IClientMessage>(binding, incomingMessage);
                     }
+
+                    if (!bypassRatelimit)
+                        InvocationHistory[key] = now;
+
+                    TResult Invoke<TResult>(CommandBinding binding, PrivateMessage message) =>
+                        (TResult)binding.Method.Invoke(GetProcessor(binding, message), GetArguments(binding, message.Message));
+
+                    CommandProcessor GetProcessor(CommandBinding binding, PrivateMessage message)
+                    {
+                        var processor = processorProvider.GetProcessor(binding, message);
+                        processor.BypassRateLimit = () => bypassRatelimit = true;
+                        return processor;
+                    }
                 }
             }
         }
 
-        private TResult Invoke<TResult>(CommandBinding binding, PrivateMessage message) =>
-            (TResult)binding.Method.Invoke(processorProvider.GetProcessor(binding, message), GetArguments(binding, message.Message));
 
         private object[] GetArguments(CommandBinding binding, string message)
         {

@@ -1,4 +1,5 @@
 ﻿using GravyIrc.Messages;
+using System;
 
 namespace GravyBot.Commands
 {
@@ -17,5 +18,10 @@ namespace GravyBot.Commands
         /// </summary>
         /// <remarks>Useful for methods with multiple command bindings</remarks>
         public string TriggeringCommandName { get; set; }
+
+        /// <summary>
+        /// Prevents an invokation from bumping ratelimit history
+        /// </summary>
+        public Action BypassRateLimit { get; set; }
     }
 }

@@ -35,6 +35,16 @@ namespace GravyBot.Commands.Tests
         }
 
         [Fact]
+        public async Task Trim_Parameters()
+        {
+            var msg = new PrivateMessage("#test", ".cb hello   potato   ");
+            var responses = await orchestrator.RespondAsync(msg).ToListAsync();
+            Assert.NotEmpty(responses);
+            var resp = responses.FirstOrDefault() as PrivateMessage;
+            Assert.Equal("hello, potato", resp.Message);
+        }
+
+        [Fact]
         public async Task Accept_Multiple_Strings()
         {
             var msg = new PrivateMessage("#test", ".cb potato yeet yote");
@@ -179,6 +189,32 @@ namespace GravyBot.Commands.Tests
         }
 
         [Fact]
+        public async Task Respect_RateLimit_Bypass()
+        {
+            await Task.Delay(TimeSpan.FromSeconds(3));
+            var msg = new PrivateMessage("#public", ".cb bypass spud");
+
+            for (var i = 0; i < 5; i++)
+            {
+                var resp = await orchestrator.RespondAsync(msg).ToListAsync();
+                Assert.NotEmpty(resp);
+                Assert.IsAssignableFrom<PrivateMessage>(resp.FirstOrDefault());
+            }
+
+            msg = new PrivateMessage("#public", ".cb bypass nospud");
+
+            for (var i = 0; i < 5; i++)
+            {
+                var resp = await orchestrator.RespondAsync(msg).ToListAsync();
+                Assert.NotEmpty(resp);
+                if (i == 0)
+                    Assert.IsAssignableFrom<PrivateMessage>(resp.FirstOrDefault());
+                else
+                    Assert.IsAssignableFrom<NoticeMessage>(resp.FirstOrDefault());
+            }
+        }
+
+        [Fact]
         public async Task Block_In_NonWhitelisted_Channel()
         {
             var msg = new PrivateMessage("#secondary", ".cb unannoy");
@@ -265,6 +301,14 @@ namespace GravyBot.Commands.Tests
 
             [Command("nope"), ChannelPolicy("nonexistent")]
             public PrivateMessage WontWork() => default;
+
+            [Command("bypass {veggie}"), RateLimit(2, TimeUnit.Second)]
+            public PrivateMessage BypassOnSpud(string veggie)
+            {
+                if (veggie == "spud")
+                    BypassRateLimit();
+                return new PrivateMessage("nobody", "yee");
+            }
         }
     }
 }
