@@ -24,6 +24,20 @@ namespace GravyBot.Commands.Tests
         }
 
         [Fact]
+        public void Handle_Singleword_Commands()
+        {
+            var command = new CommandAttribute("super {yeet}");
+            Assert.Equal("super", command.CommandName);
+        }
+
+        [Fact]
+        public void Handle_Multiword_Commands()
+        {
+            var command = new CommandAttribute("super potato {yeet}");
+            Assert.Equal("super potato", command.CommandName);
+        }
+
+        [Fact]
         public void Parse_Single_Named_Arg()
         {
             var command = new CommandAttribute("booru {id}");

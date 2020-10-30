@@ -26,15 +26,7 @@ namespace GravyBot.Commands
             this.processorProvider = processorProvider;
         }
 
-        public bool Matches(PrivateMessage incomingMessage)
-        {
-            if (HasBinding(incomingMessage.Message))
-            {
-                var binding = GetBinding(incomingMessage.Message);
-                return binding.HasValue && binding.Value.Value.Command.MatchingPattern.IsMatch(incomingMessage.Message);
-            }
-            return false;
-        }
+        public bool Matches(PrivateMessage incomingMessage) => HasBinding(incomingMessage.Message);
 
         public async IAsyncEnumerable<IClientMessage> RespondAsync(PrivateMessage incomingMessage)
         {
@@ -44,20 +36,16 @@ namespace GravyBot.Commands
             {
                 var binding = pair.Value.Value;
                 bool hasMainResponseBlocked = false;
+                var key = new UserInvocation(incomingMessage.From, incomingMessage.To, binding.Command.CommandName);
+                var now = DateTime.Now;
 
                 if (binding.IsRateLimited)
                 {
-                    var key = new UserInvocation(incomingMessage.From, incomingMessage.To, binding.Command.CommandName);
-                    var now = DateTime.Now;
                     if (incomingMessage.IsChannelMessage && InvocationHistory.TryGetValue(key, out var previousInvocationTime) && now - previousInvocationTime < binding.RateLimitPeriod)
                     {
                         hasMainResponseBlocked = true;
                         var remainingTime = binding.RateLimitPeriod.Value - (now - previousInvocationTime);
                         yield return new NoticeMessage(incomingMessage.From, $"You must wait {remainingTime.ToFriendlyString()} before using the {binding.Command.CommandName} command again.");
-                    }
-                    else
-                    {
-                        InvocationHistory[key] = now;
                     }
                 }
 
@@ -89,6 +77,8 @@ namespace GravyBot.Commands
 
                 if (!hasMainResponseBlocked)
                 {
+                    var bypassRatelimit = false;
+
                     if (binding.IsAsync)
                     {
                         if (binding.ProducesMultipleResponses)
@@ -105,16 +95,32 @@ namespace GravyBot.Commands
                         else
                             yield return Invoke<IClientMessage>(binding, incomingMessage);
                     }
+
+                    if (!bypassRatelimit)
+                        InvocationHistory[key] = now;
+
+                    TResult Invoke<TResult>(CommandBinding binding, PrivateMessage message) =>
+                        (TResult)binding.Method.Invoke(GetProcessor(binding, message), GetArguments(binding, message.Message));
+
+                    CommandProcessor GetProcessor(CommandBinding binding, PrivateMessage message)
+                    {
+                        var processor = processorProvider.GetProcessor(binding, message);
+                        processor.BypassRateLimit = () => bypassRatelimit = true;
+                        return processor;
+                    }
                 }
             }
         }
 
-        private TResult Invoke<TResult>(CommandBinding binding, PrivateMessage message) =>
-            (TResult)binding.Method.Invoke(processorProvider.GetProcessor(binding, message), GetArguments(binding, message.Message));
 
         private object[] GetArguments(CommandBinding binding, string message)
         {
             var match = binding.Command.MatchingPattern.Match(message);
+
+            // handle parameterless calls
+            if (!match.Success)
+                binding.Method.GetParameters().Select<ParameterInfo, object>(_ => null).ToArray();
+
             return binding.Method.GetParameters().Select(GetArgument).ToArray();
 
             object GetArgument(ParameterInfo paramInfo)
@@ -130,7 +136,7 @@ namespace GravyBot.Commands
                         {
                             try
                             {
-                                return converter.ConvertFromString(matchingGroup.Value);
+                                return converter.ConvertFromString(matchingGroup.Value?.Trim());
                             }
                             catch (NotSupportedException)
                             {
@@ -158,7 +164,7 @@ namespace GravyBot.Commands
             if (message.StartsWith(configuration.CommandPrefix, StringComparison.OrdinalIgnoreCase))
             {
                 var commandSegment = message.Remove(0, configuration.CommandPrefix.Length);
-                return builder.Bindings.FirstOrDefault(p => commandSegment.StartsWith(p.Key, StringComparison.OrdinalIgnoreCase));
+                return builder.Bindings.OrderByDescending(b => b.Key.Length).FirstOrDefault(p => commandSegment.StartsWith(p.Key, StringComparison.OrdinalIgnoreCase));
             }
             return null;
         }

@@ -22,7 +22,7 @@ namespace GravyBot.Commands
         public virtual void RegisterProcessors(Assembly assembly)
         {
             var method = typeof(CommandOrchestratorBuilder).GetMethod(nameof(RegisterProcessor));
-            foreach (var processorType in assembly.GetTypes().Where(t => typeof(CommandProcessor).IsAssignableFrom(t)))
+            foreach (var processorType in assembly.GetTypes().Where(t => !t.IsAbstract).Where(t => typeof(CommandProcessor).IsAssignableFrom(t)))
             {
                 var genericMethod = method.MakeGenericMethod(processorType);
                 genericMethod.Invoke(this, default);
@@ -55,7 +55,7 @@ namespace GravyBot.Commands
             Mode = mode
         });
 
-        
+
         public void AddChannelPolicy(string policyName, ChannelPolicy policy)
         {
             policies[policyName] = policy;
