@@ -1,4 +1,5 @@
 ﻿using GravyIrc.Messages;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 
 namespace GravyBot.Commands
@@ -8,16 +9,16 @@ namespace GravyBot.Commands
         private readonly ICommandOrchestratorBuilder builder;
         private readonly IrcBotConfiguration botConfiguration;
 
-        public HelpCommandProcessor(ICommandOrchestratorBuilder builder, IrcBotConfiguration botConfiguration)
+        public HelpCommandProcessor(ICommandOrchestratorBuilder builder, IOptions<IrcBotConfiguration> options)
         {
             this.builder = builder;
-            this.botConfiguration = botConfiguration;
+            botConfiguration = options.Value;
         }
 
         [Command("help {commandName}", Description = "Get information about a command")]
         public IClientMessage GetCommandInfo(string commandName)
         {
-            if (!string.IsNullOrEmpty(commandName))
+            if (string.IsNullOrEmpty(commandName))
                 commandName = "help";
 
             if (builder.Bindings.ContainsKey(commandName))
@@ -40,11 +41,11 @@ namespace GravyBot.Commands
                 if (binding.IsRateLimited)
                     segments.Add($"Can only be used every {binding.RateLimitPeriod.Value.ToFriendlyString()}");
 
-                return new NoticeMessage(IncomingMessage.From, string.Join(" | ", segments));
+                return new PrivateMessage(IncomingMessage.IsChannelMessage ? IncomingMessage.To : IncomingMessage.From, $"{IrcValues.BOLD}{commandName}{IrcValues.RESET}: {string.Join(" | ", segments)}");
             }
             else
             {
-                return new NoticeMessage(IncomingMessage.From, $"No command {IrcValues.BOLD}{commandName}{IrcValues.RESET} registered.");
+                return new PrivateMessage(IncomingMessage.IsChannelMessage ? IncomingMessage.To : IncomingMessage.From, $"No command {IrcValues.BOLD}{commandName}{IrcValues.RESET} registered.");
             }
         }
     }

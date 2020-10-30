@@ -167,7 +167,7 @@ namespace GravyBot.Commands
             if (message.StartsWith(configuration.CommandPrefix, StringComparison.OrdinalIgnoreCase))
             {
                 var commandSegment = message.Remove(0, configuration.CommandPrefix.Length);
-                return builder.Bindings.FirstOrDefault(p => commandSegment.StartsWith(p.Key, StringComparison.OrdinalIgnoreCase));
+                return builder.Bindings.OrderByDescending(b => b.Key.Length).FirstOrDefault(p => commandSegment.StartsWith(p.Key, StringComparison.OrdinalIgnoreCase));
             }
             return null;
         }
