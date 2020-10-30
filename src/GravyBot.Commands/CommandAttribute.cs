@@ -23,6 +23,11 @@ namespace GravyBot.Commands
         }
 
         /// <summary>
+        /// Description of command's function
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Raw format specifier
         /// </summary>
         public string CommandFormat { get; private set; }
