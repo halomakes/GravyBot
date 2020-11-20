@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -75,6 +76,21 @@ namespace GravyBot.Commands
                     }
                 }
 
+                object[] arguments = default;
+                string validationMessage = default;
+                try
+                {
+                    arguments = GetArguments(binding, incomingMessage.Message);
+                }
+                catch (ValidationException ve)
+                {
+                    hasMainResponseBlocked = true;
+                    validationMessage = ve.Message;
+                }
+
+                if (!string.IsNullOrEmpty(validationMessage))
+                    yield return new NoticeMessage(incomingMessage.From, validationMessage);
+
                 if (!hasMainResponseBlocked)
                 {
                     var bypassRatelimit = false;
@@ -100,7 +116,7 @@ namespace GravyBot.Commands
                         InvocationHistory[key] = now;
 
                     TResult Invoke<TResult>(CommandBinding binding, PrivateMessage message) =>
-                        (TResult)binding.Method.Invoke(GetProcessor(binding, message), GetArguments(binding, message.Message));
+                        (TResult)binding.Method.Invoke(GetProcessor(binding, message), arguments);
 
                     CommandProcessor GetProcessor(CommandBinding binding, PrivateMessage message)
                     {
@@ -111,7 +127,6 @@ namespace GravyBot.Commands
                 }
             }
         }
-
 
         private object[] GetArguments(CommandBinding binding, string message)
         {
@@ -129,23 +144,44 @@ namespace GravyBot.Commands
                 if (indexInCommand > -1)
                 {
                     var matchingGroup = match.Groups[indexInCommand + 1];
-                    if (matchingGroup.Success)
+                    var stringValue = matchingGroup.Success ? matchingGroup.Value?.Trim() : default;
+
+                    // handle required validation before trying to convert
+                    ValidateRequired(paramInfo, stringValue);
+
+                    var converter = TypeDescriptor.GetConverter(paramInfo.ParameterType);
+                    if (converter.CanConvertFrom(typeof(string)))
                     {
-                        var converter = TypeDescriptor.GetConverter(paramInfo.ParameterType);
-                        if (converter.CanConvertFrom(typeof(string)))
+                        try
                         {
-                            try
-                            {
-                                return converter.ConvertFromString(matchingGroup.Value?.Trim());
-                            }
-                            catch (NotSupportedException)
-                            {
-                                return null;
-                            }
+                            var value = converter.ConvertFromString(stringValue);
+                            Validate(paramInfo, value);
+                            return value;
+                        }
+                        catch (ArgumentException)
+                        {
+                            throw new ValidationException($"Cannot convert value {stringValue} to {paramInfo.ParameterType.Name}.");
+                        }
+                        catch (NotSupportedException)
+                        {
+                            throw new ValidationException($"Cannot convert value {stringValue} to {paramInfo.ParameterType.Name}.");
                         }
                     }
                 }
                 return null;
+            }
+
+            static void ValidateRequired(ParameterInfo parameter, object value)
+            {
+                foreach (var attribute in parameter.GetCustomAttributes<RequiredAttribute>())
+                    attribute.Validate(value, parameter.Name);
+            }
+
+            static void Validate(ParameterInfo parameter, object value)
+            {
+                foreach (var attribute in parameter.GetCustomAttributes())
+                    if (attribute is ValidationAttribute validator)
+                        validator.Validate(value, parameter.Name);
             }
         }
 
