@@ -51,5 +51,10 @@ namespace GravyBot
         /// Channel to send notifications to
         /// </summary>
         public string NotifyChannel { get; set; }
+
+        /// <summary>
+        /// Maximum number of incoming messages to retain
+        /// </summary>
+        public int MaxMessageHistory { get; set; } = 2000;
     }
 }

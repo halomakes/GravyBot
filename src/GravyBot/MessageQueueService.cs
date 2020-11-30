@@ -1,5 +1,6 @@
 ﻿using GravyIrc.Messages;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace GravyBot
     /// </summary>
     public class MessageQueueService
     {
-        private const int MAX_HISTORY = 300;
+        private readonly int MaxHistory;
 
         private List<IClientMessage> queuedMessages = new List<IClientMessage>();
         private List<object> messageHistory = new List<object>();
@@ -24,9 +25,10 @@ namespace GravyBot
         /// </summary>
         public event EventHandler MessageAdded;
 
-        public MessageQueueService(IServiceProvider serviceProvider)
+        public MessageQueueService(IServiceProvider serviceProvider, IOptions<IrcBotConfiguration> options)
         {
             this.serviceProvider = serviceProvider;
+            MaxHistory = options.Value.MaxMessageHistory;
         }
 
         /// <summary>
@@ -137,19 +139,19 @@ namespace GravyBot
 
         private void TrimHistory()
         {
-            var overflow = messageHistory.Count - MAX_HISTORY;
+            var overflow = messageHistory.Count - MaxHistory;
             if (overflow > 0)
             {
-                messageHistory = messageHistory.Skip(overflow).Take(MAX_HISTORY).ToList();
+                messageHistory = messageHistory.Skip(overflow).Take(MaxHistory).ToList();
             }
         }
 
         private void TrimOutputHistory()
         {
-            var overflow = outputHistory.Count - MAX_HISTORY;
+            var overflow = outputHistory.Count - MaxHistory;
             if (overflow > 0)
             {
-                outputHistory = outputHistory.Skip(overflow).Take(MAX_HISTORY).ToList();
+                outputHistory = outputHistory.Skip(overflow).Take(MaxHistory).ToList();
             }
         }
     }
