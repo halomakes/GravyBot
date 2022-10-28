@@ -149,6 +149,9 @@ namespace GravyBot.Commands
                     // handle required validation before trying to convert
                     ValidateRequired(paramInfo, stringValue);
 
+                    if (string.IsNullOrEmpty(stringValue))
+                        return null;
+
                     var converter = GetConverter(paramInfo);
                     if (converter.CanConvertFrom(typeof(string)))
                     {
