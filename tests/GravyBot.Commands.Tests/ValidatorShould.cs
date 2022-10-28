@@ -1,7 +1,9 @@
 ﻿using GravyIrc.Messages;
 using Microsoft.Extensions.Options;
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -41,6 +43,16 @@ namespace GravyBot.Commands.Tests
             var validationResp = responses.FirstOrDefault() as NoticeMessage;
             Assert.Equal("Cannot convert value potato to Int32.", validationResp.Message);
             Assert.Single(responses);
+        }
+
+        [Fact]
+        public async Task Use_Custom_Converter()
+        {
+            var msg = new PrivateMessage("#test", ".cb parse potato");
+            var responses = await orchestrator.RespondAsync(msg).ToListAsync();
+            Assert.NotEmpty(responses);
+            var resp = responses.FirstOrDefault() as PrivateMessage;
+            Assert.Equal("Parsed out 00:01:09", resp.Message);
         }
 
         [Fact]
@@ -144,6 +156,40 @@ namespace GravyBot.Commands.Tests
 
             [Command("donate {amount}")]
             public PrivateMessage Donate([Required, Range(0, 500)] decimal amount) => new PrivateMessage("nobody", $"Someone donated {amount:C}");
+
+            [Command("parse {irrelevant}")]
+            public PrivateMessage Parse([Required, TypeConverter(typeof(CustomConverter))] TimeSpan? irrelevant) => new PrivateMessage("nobody", $"Parsed out {irrelevant}");
+        }
+
+        [TypeConverter(typeof(TimeSpan?))]
+        public class CustomConverter : TypeConverter
+        {
+            public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+            {
+                if (sourceType == typeof(string))
+                {
+                    return true;
+                }
+                return base.CanConvertFrom(context, sourceType);
+            }
+
+            public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+            {
+                if (value is string)
+                {
+                    return TimeSpan.FromSeconds(69);
+                }
+                return base.ConvertFrom(context, culture, value);
+            }
+
+            public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+            {
+                if (destinationType == typeof(string))
+                {
+                    return value.ToString();
+                }
+                return base.ConvertTo(context, culture, value, destinationType);
+            }
         }
     }
 }

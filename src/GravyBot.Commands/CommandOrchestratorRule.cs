@@ -149,7 +149,7 @@ namespace GravyBot.Commands
                     // handle required validation before trying to convert
                     ValidateRequired(paramInfo, stringValue);
 
-                    var converter = TypeDescriptor.GetConverter(paramInfo.ParameterType);
+                    var converter = GetConverter(paramInfo);
                     if (converter.CanConvertFrom(typeof(string)))
                     {
                         try
@@ -158,17 +158,28 @@ namespace GravyBot.Commands
                             Validate(paramInfo, value);
                             return value;
                         }
-                        catch (ArgumentException)
+                        catch (Exception e)
                         {
-                            throw new ValidationException($"Cannot convert value {stringValue} to {paramInfo.ParameterType.Name}.");
-                        }
-                        catch (NotSupportedException)
-                        {
-                            throw new ValidationException($"Cannot convert value {stringValue} to {paramInfo.ParameterType.Name}.");
+                            if (e is ArgumentException || e is NotSupportedException || e is FormatException)
+                                throw new ValidationException($"Cannot convert value {stringValue} to {paramInfo.ParameterType.Name}.");
+                            throw;
                         }
                     }
                 }
                 return null;
+            }
+
+            static TypeConverter GetConverter(ParameterInfo paramInfo)
+            {
+                if (paramInfo.HasAttribute<TypeConverterAttribute>())
+                {
+                    var converterType = Type.GetType(paramInfo.GetAttribute<TypeConverterAttribute>().ConverterTypeName);
+                    return (TypeConverter)Activator.CreateInstance(converterType);
+                }
+                else
+                {
+                    return TypeDescriptor.GetConverter(paramInfo.ParameterType);
+                }
             }
 
             static void ValidateRequired(ParameterInfo parameter, object value)
