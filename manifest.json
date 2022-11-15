@@ -1,0 +1,704 @@
+{
+  "homepages": [],
+  "source_base_path": "/home/travis/build/halomademeapc/GravyBot/docfx_project",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.AsyncMessageRuleBase-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.AsyncMessageRuleBase-1.html",
+          "hash": "USRLRcOFTA/21CHtWJ9+/17fKz57A4yEoFJbsJE5GLw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.BotRulePipeline.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.BotRulePipeline.html",
+          "hash": "UCOtKzSB6Uw1Jg7gmQcrMSbUPRLzDz2Omf0P4/2BUbc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.ChannelOnlyAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.ChannelOnlyAttribute.html",
+          "hash": "zQM81Oc3ibbmA6rDSAJymSu9++6Kr5or/eJwT9Q+bpY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.ChannelPolicy.PolicyMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.ChannelPolicy.PolicyMode.html",
+          "hash": "FvEyxEiDLQ2QOAzkUK5T2scX/wDCpQhglJPFK2kHr6g="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.ChannelPolicy.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.ChannelPolicy.html",
+          "hash": "jpFDr5r0CgUHNARHQjzEGvADjj9SqFOhgxLTP4cZAHU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.ChannelPolicyAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.ChannelPolicyAttribute.html",
+          "hash": "x/mw+v7sONu0vKhYtJw/nP+9PKyWZZphvA7CIFLy0Xc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.CommandAliasRule-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.CommandAliasRule-1.html",
+          "hash": "bJuMBXHkwB2VCu6BrXFQUT7RTx6HProsxz/PvrgAGys="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.CommandAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.CommandAttribute.html",
+          "hash": "VJaseJSfaLiIEuQCxT+8tdj5InEVreXnbY43X1YzI2I="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.CommandBinding.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.CommandBinding.html",
+          "hash": "ZOBUejSemjZ59GoVNprSYALQpcFK94wlCIf6ENOQfzo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.CommandOrchestratorBuilder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.CommandOrchestratorBuilder.html",
+          "hash": "J3fMkh3U9ni4VXmDFdpgqJOOIXB2a6tIE7iyxtg3C4I="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.CommandOrchestratorRule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.CommandOrchestratorRule.html",
+          "hash": "ON2XBhNZaDsV2x12D1i+re+MuXQw9PAuu/RgkZ233ss="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.CommandProcessor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.CommandProcessor.html",
+          "hash": "Msrk5IjLhniubmwrzQXu1zvIGU79zqfzNpUiJbXYpa8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.CommandProcessorProvider.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.CommandProcessorProvider.html",
+          "hash": "NhP9hbGeoHfTbAb9u52cCsWeicb22r6GqYMkw2DQj1c="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.DirectOnlyAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.DirectOnlyAttribute.html",
+          "hash": "hHH6n1tqMP8JM1PawjCels3Vbg2x2eWOrPYKt0Iajkw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.DuplicateCommandException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.DuplicateCommandException.html",
+          "hash": "wGMXycnhcsOnXxdz5x/MVOn4MK2LXoTRs35HLmIg1CU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.HelpCommandProcessor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.HelpCommandProcessor.html",
+          "hash": "OU8qZULhQ+ogGXHTIs6Tm5o7RmF1IR3MjfxKpc+escg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.ICommandOrchestratorBuilder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.ICommandOrchestratorBuilder.html",
+          "hash": "J3mMWtOQMRtfg+CX1GWmq/QxTUkdJ6UnZLjxVI2S/hw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.ICommandProcessorProvider.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.ICommandProcessorProvider.html",
+          "hash": "6CLipO1IZdCKGGjsSxq7IyLF5hDOmagWqRAyRIstXY0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.InvalidCommandUsageException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.InvalidCommandUsageException.html",
+          "hash": "4lmYDMcdPh+z2enhO196GbMwmAbstyKckRpx94iqOoo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.InvalidPolicyException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.InvalidPolicyException.html",
+          "hash": "HwL3MSQiL/7InUPugLAOUQH2zmN+U+OBiM0OS9bkdBQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.RateLimitAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.RateLimitAttribute.html",
+          "hash": "twSnjICtysmY0k16znDwD2JKkGL/jV9+/6j6WRWMvIg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.StartupExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.StartupExtensions.html",
+          "hash": "KqdnoRXd6Vyp5Zu4ehpRw97jRC2eGTpO46fuSDxRFzE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.TimeUnit.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.TimeUnit.html",
+          "hash": "z2AGkUwdgfEfo+o2p9NwN8NqkvLSn5ezIo26mmhfIfY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Commands.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Commands.html",
+          "hash": "WwzssKWCjihyrYtMdFIt/Uh8COAdNvF5KpDCYFKC7Qg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.DefaultRules.Rules.ExceptionLoggingRule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.DefaultRules.Rules.ExceptionLoggingRule.html",
+          "hash": "es1FgCV6xFaj1/DCQ0b4wTxApptvQUhegHOuH8a3NOs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.DefaultRules.Rules.HelloRule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.DefaultRules.Rules.HelloRule.html",
+          "hash": "33/K+MD6Hp6YZahMhaq4T/1lWfUKeK+iuGbJisGpOoI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.DefaultRules.Rules.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.DefaultRules.Rules.html",
+          "hash": "ZWJsdp7ocm2RPolXElvY3wVGEOMLF1T0ke4QXJSJKTg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.DefaultRules.StartupExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.DefaultRules.StartupExtensions.html",
+          "hash": "WrKUnJN2knMYehiImGlMnrPUAo0FgREE4j6bAWV4Hy4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.DefaultRules.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.DefaultRules.html",
+          "hash": "eolRFh7d3BDz+GuSixWAueGvJcdurB8S2FJ3N+p2p70="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.Extensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.Extensions.html",
+          "hash": "f4wSfcbnYXYr/uHrhKAb1Hbs6ANX/SvNVPYGT6U4pt4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.IAsyncMessageRule-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.IAsyncMessageRule-1.html",
+          "hash": "uPKrMDyaki31Epz084ILACfb2bQwBg4aDLmcZOjEMgE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.IAsyncMessageRule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.IAsyncMessageRule.html",
+          "hash": "JUzfJmVH8f6rRlRRQw9w2HhhfwQ5LKMtAi6D27Fzckc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.IMessageRule-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.IMessageRule-1.html",
+          "hash": "+F1VBR/mlawr7/4GSZBFDO7Vv0ZXq+MOCWoqC33FUgQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.IMessageRule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.IMessageRule.html",
+          "hash": "PrkyQ6IK/6GZ8JXuNDf5PP4fcMzwtMBkLmUhW656afQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.IrcBotConfiguration.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.IrcBotConfiguration.html",
+          "hash": "osoyTbQf8MAVSvHmGTjnU5Tavse7Iabpb8wXSTV4ybo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.IrcBotService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.IrcBotService.html",
+          "hash": "Ff4qu/CdyIzdLZY99Bdrd3TvK9uxrkA56vYRKpPFOwA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.IrcValues.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.IrcValues.html",
+          "hash": "aozWidqZuL/yoAmzLSqJ4w7pCCyUR0D4Qik+HmBIQJw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.MessageQueueService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.MessageQueueService.html",
+          "hash": "2GTHA6XemeYGfsr7dg06JZfuBdYiPbTk7hjvREYZNDI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.MessageRuleBase-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.MessageRuleBase-1.html",
+          "hash": "85EDOtJWOdnAWda/BBoyyqGQxDP/Dei0Al9xPjYEdOg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GravyBot.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GravyBot.html",
+          "hash": "zh1j0q0JbXRb02YZRj4P7ZxvwdGp+g31MbNejP+ZIO4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "jVCEVU1ZhF0hld4oHjzKT9VQzIjEUAJ2ZXptNhFLZmE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "fFNyFvhyUUZAYogA7t63GN7vzQMYicXKAAlulN344i8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/commands.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/commands.html",
+          "hash": "trly1k4g+qnKLXPUz+T64e2C+gY0RSor8k+O1kPDfEk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/commands_command-policies.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/commands_command-policies.html",
+          "hash": "JfkI/XPT82jHycTByTVZxrtGf7es6cvBoEzGEYz+XIk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/commands_command-processors.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/commands_command-processors.html",
+          "hash": "wra1SL7wRzCcuE01RNRB4UwpqwxBE5IDnOv7iLadN/Q="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/commands_helpdocs.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/commands_helpdocs.html",
+          "hash": "jCbslTsxUkyM1TFXNJamPoPShuJl06fraEf4pO3dV9M="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/commands_parameter-binding.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/commands_parameter-binding.html",
+          "hash": "2nuDU85z7Ue6Lpyk/40kNsvYNm24CM94GcZGy5mLAOM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/commands_processor-registration.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/commands_processor-registration.html",
+          "hash": "6dFL6w15nDmJXFRy5fHhUPlz7H7Gi4mLPgEIe7GMncM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/custom-events.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/custom-events.html",
+          "hash": "g4kRdpqhocdRw1QoxWi0N6zh8eF2JHQqrrub0bocTkk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/custom-rules.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/custom-rules.html",
+          "hash": "PWmF9t+UhGxr3qU0RYnGbxBy5gZu5V0Sr8AMP3QjDn4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/getting-started.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/getting-started.html",
+          "hash": "IwOJNRSPaUZ0Vkdap/hdh3ecxF2K6axsbyV6c1PIgzY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html",
+          "hash": "eBY8ZM7nSUAVsWHafmy/ktCJ0HFbmqXu2j195PGG3a4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "0lnm8k1f32m1u8eWJU/jiMT5DijH24J6x9Q+tEgl41k="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "CNMmo1jFOPHRiVQNTX6JxOKNlDz/F5jlFaEzbIgfnB4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot build incrementally because last build info is missing.",
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0,
+        "full_build_reason_code": "NoAvailableBuildCache"
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 11,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 40,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: last post processor info is null.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
