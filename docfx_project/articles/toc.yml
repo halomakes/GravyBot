@@ -1,5 +1,18 @@
 - name: Getting Started
   href: getting-started.md
+- name: Commands Package
+  href: commands.md
+  items:
+    - name: Command Processors
+      href: commands_command-processors.md
+    - name: Parameter Binding
+      href: commands_parameter-binding.md
+    - name: Command Policies
+      href: commands_command-policies.md
+    - name: Processor Wiring
+      href: commands_processor-registration.md
+    - name: Helpdoc Generation
+      href: commands_helpdocs.md
 - name: Adding Custom Rules
   href: custom-rules.md
 - name: Raising Custom Events
