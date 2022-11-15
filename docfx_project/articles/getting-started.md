@@ -5,7 +5,7 @@ At the center of GravyBot are its *[rule pipeline](/api/GravyBot.BotRulePipeline
 
 ## Commands
 
-The optional commands makes building your bot even easier with self-documenting attribute-based command binding and typed parameter binding.  See more about using it at (/articles/commands.html)
+The optional commands makes building your bot even easier with self-documenting attribute-based command binding and typed parameter binding.  See more about using it at [Commands Package](/articles/commands.html)
 
 ## Installation and Configuration
 

@@ -15,7 +15,7 @@ services.AddCommandOrchestrator(builder =>
 
 You should now be able to interact with your command processor:
 ```
-!help potato
+!help compliment
 ```
 
-> **compliment**: Pay someone a nice (or awkward) compliment. | Usage: .cb compliment {nick} | Can only be used in channels | Can only be used every 10s
+> **compliment**: Pay someone a nice (or awkward) compliment. | Usage: !compliment {nick} | Can only be used in channels | Can only be used every 10s
